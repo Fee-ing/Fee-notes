@@ -2,8 +2,9 @@
   <el-menu
     class="app-nav"
     :default-active="activeNav"
-    :default-openeds="['2']"
+    :default-openeds="['3']"
   >
+    <div class="avatar"></div>
     <template v-for="(item, row) in navConfig" :key="row">
       <el-sub-menu v-if="item.children" :index="`${row + 1}`">
         <template #title>
@@ -78,5 +79,15 @@ const handleClick = (path, index) => {
 .app-nav {
   width: 200px;
   height: 100%;
+  .avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin: 30px auto 20px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url(../assets/avatar.jpg);
+  }
 }
 </style>
