@@ -53,6 +53,10 @@ const navConfig = [
       {
         title: 'CSS三角形生成器',
         path: '/triangle'
+      },
+      {
+        title: 'PS投影转CSS3',
+        path: '/shadow'
       }
     ]
   }
@@ -73,5 +77,6 @@ const handleClick = (path, index) => {
 <style lang="less" scoped>
 .app-nav {
   width: 200px;
+  height: 100%;
 }
 </style>

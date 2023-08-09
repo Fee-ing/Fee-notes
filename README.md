@@ -1,4 +1,4 @@
-# fee-tools
+# notes
 
 ## Project setup
 ```

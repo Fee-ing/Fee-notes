@@ -1,6 +1,7 @@
 import Home from '@/pages/HomePage.vue'
 import Plugins from '@/pages/PluginsPage.vue'
 import Triangle from '@/pages/TrianglePage.vue'
+import Shadow from '@/pages/ShadowPage.vue'
 
 const routes = [
   {
@@ -22,6 +23,13 @@ const routes = [
     component: Triangle,
     meta: {
       title: 'CSS三角形生成器'
+    }
+  },
+  {
+    path: '/shadow',
+    component: Shadow,
+    meta: {
+      title: 'Photoshop投影转CSS3'
     }
   }
 ]

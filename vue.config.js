@@ -8,5 +8,6 @@ module.exports = defineConfig({
         args[0].title = '前端笔记'
         return args
       })
-  }
+  },
+  publicPath: '/Fee-notes/'
 })

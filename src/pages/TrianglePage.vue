@@ -1,6 +1,6 @@
 <template>
-  <div class="page-wrapper flex" :model="form">
-    <el-form label-width="60px">
+  <div class="page-wrapper flex">
+    <el-form label-width="60px" :model="form" size="small">
       <el-form-item label="方向：">
         <div class="triangle-box">
           <div class="box-content">
@@ -136,20 +136,29 @@
       </el-form-item>
     </el-form>
     <div class="page-right">
-      <div class="right-show">
-        <div class="triangle" :style="triangleStyle"></div>
+      <div class="show-wrapper">
+        <div class="show-triangle" :style="triangleStyle"></div>
       </div>
-      <div class="right-code">
+      <div class="code-wrapper">
         <highlightjs
           autodetect
           :code="triangleCode"
         ></highlightjs>
         <el-tooltip
           effect="light"
+          content="重置数据"
+          placement="top-end"
+        >
+          <el-icon class="refresh-btn btn" @click="handleResetData">
+            <component :is="'Refresh'"></component>
+          </el-icon>
+        </el-tooltip>
+        <el-tooltip
+          effect="light"
           content="复制代码"
           placement="top-end"
         >
-          <el-icon class="copy-btn" :data-clipboard-text="triangleCode">
+          <el-icon class="copy-btn btn" :data-clipboard-text="triangleCode">
             <component :is="'CopyDocument'"></component>
           </el-icon>
         </el-tooltip>
@@ -164,7 +173,7 @@ import ClipboardJS from 'clipboard'
 import { ElNotification } from 'element-plus'
 import { stripNumber } from '../utils/func'
 
-const form = reactive({
+const initialData = {
   direction: 'top',
   shape: '1',
   color: '#F94C10',
@@ -174,7 +183,9 @@ const form = reactive({
   height: 200,
   topHeight: 100,
   bottomHeight: 100
-})
+}
+
+const form = reactive({ ...initialData })
 
 const disabledWidth = computed(() => {
   return (['left', 'right'].includes(form.direction) && form.shape === '2') || (['top', 'bottom'].includes(form.direction) && form.shape === '3')
@@ -303,6 +314,14 @@ const handleChangeSideHeight = () => {
   form.height = form.topHeight + form.bottomHeight
 }
 
+const handleResetData = () => {
+  for (const key in initialData) {
+    if (Object.hasOwnProperty.call(initialData, key)) {
+      form[key] = initialData[key]
+    }
+  }
+}
+
 onMounted(() => {
   const clipboard = new ClipboardJS('.copy-btn')
   clipboard.on('success', function (e) {
@@ -321,11 +340,10 @@ onMounted(() => {
     })
   })
 })
-
 </script>
 
 <style lang="less" scoped>
-/deep/ .el-form-item__label {
+:deep(.el-form-item__label) {
   font-weight: 600;
 }
 .triangle-box {
@@ -428,7 +446,7 @@ onMounted(() => {
     top: -100px;
     left: 50%;
     transform: translateX(-50%);
-    /deep/ .el-radio__label {
+    :deep(.el-radio__label) {
       margin: 0;
       padding: 0;
     }
@@ -438,7 +456,7 @@ onMounted(() => {
     bottom: -100px;
     left: 50%;
     transform: translateX(-50%);
-    /deep/ .el-radio__label {
+    :deep(.el-radio__label) {
       margin: 0;
       padding: 0;
     }
@@ -448,7 +466,7 @@ onMounted(() => {
     left: -108px;
     top: 50%;
     transform: translateY(-50%);
-    /deep/ .el-radio__label {
+    :deep(.el-radio__label) {
       padding: 0 8px 0 0;
     }
   }
@@ -486,7 +504,7 @@ onMounted(() => {
     position: absolute;
     left: -112px;
     bottom: -88px;
-    /deep/ .el-radio__label {
+    :deep(.el-radio__label) {
       padding: 0;
       position: relative;
       bottom: -15px;
@@ -498,7 +516,7 @@ onMounted(() => {
     position: absolute;
     right: -112px;
     bottom: -88px;
-    /deep/ .el-radio__label {
+    :deep(.el-radio__label) {
       padding: 0;
       position: relative;
       bottom: -15px;
@@ -508,7 +526,7 @@ onMounted(() => {
   }
 }
 .form-item {
-  /deep/ .el-form-item__content {
+  :deep(.el-form-item__content) {
     flex-direction: column;
   }
 }
@@ -524,6 +542,7 @@ onMounted(() => {
       left: 50%;
       transform: translateX(-50%);
       font-size: 12px;
+      color: var(--el-menu-active-color);
     }
     &.item1::after {
       content: '宽度';
@@ -546,13 +565,13 @@ onMounted(() => {
   }
 }
 .page-right {
-  .right-show {
+  .show-wrapper {
     width: 440px;
     height: 440px;
     background: url('../assets/transparent.png') 0 0 repeat;
     position: relative;
     overflow: hidden;
-    .triangle {
+    .show-triangle {
       width: 0;
       height: 0;
       border-style: solid;
@@ -561,14 +580,14 @@ onMounted(() => {
       top: 0;
     }
   }
-  .right-code {
+  .code-wrapper {
     position: relative;
     overflow: hidden;
-    /deep/ .hljs {
+    :deep(.hljs) {
       width: 440px;
-      min-height: 180px;
+      min-height: 150px;
     }
-    .copy-btn {
+    .btn {
       position: absolute;
       right: 10px;
       bottom: 10px;
@@ -576,6 +595,12 @@ onMounted(() => {
       color: #fff;
       font-size: 18px;
       cursor: pointer;
+      &.copy-btn {
+        right: 10px;
+      }
+      &.refresh-btn {
+        right: 50px;
+      }
     }
   }
 }

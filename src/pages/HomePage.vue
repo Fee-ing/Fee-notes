@@ -1,6 +1,10 @@
 <template>
   <div class="page-wrapper flex flex-wrap">
-    <el-card class="page-card" v-for="(item, index) in webList" :key="index">
+    <el-card
+      class="page-card"
+      v-for="(item, index) in webList"
+      :key="index"
+    >
       <template #header>
         <div class="card-header flex-v">
           <div class="flex-1">{{ item.title }}</div>
@@ -70,6 +74,10 @@ const webList = [
     description: '一个发现和分享有趣、入门级开源项目的平台'
   }
 ]
+
+// const handleOpen = (href) => {
+//   window.open(href, '_blank')
+// }
 </script>
 
 <style lang="less" scoped>
