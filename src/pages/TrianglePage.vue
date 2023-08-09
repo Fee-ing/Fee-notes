@@ -586,6 +586,9 @@ onMounted(() => {
     :deep(.hljs) {
       width: 440px;
       min-height: 150px;
+      word-break: break-all;
+      overflow: hidden;
+      white-space: break-spaces;
     }
     .btn {
       position: absolute;
