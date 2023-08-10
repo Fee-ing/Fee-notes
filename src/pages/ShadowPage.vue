@@ -1,7 +1,7 @@
 <template>
   <div class="page-wrapper">
     <div class="flex">
-      <el-card class="box-card">
+      <el-card class="box-card ps-card">
         <template #header>
           <div class="card-header">Photoshop投影参数</div>
         </template>
@@ -145,8 +145,8 @@
         </el-form>
       </el-card>
     </div>
-    <div class="flex">
-      <div class="code-wrapper">
+    <div class="flex over-h">
+      <div class="page-code">
         <highlightjs
           autodetect
           :code="shadowCode"
@@ -193,7 +193,7 @@ const initialData = {
   size: 5
 }
 
-const psForm = ref({ ...initialData })
+const psForm = ref(JSON.parse(JSON.stringify(initialData)))
 
 const transToCSS = () => {
   const _angle = (180 - psForm.value.angle) * 3.14 / 180
@@ -261,7 +261,7 @@ onMounted(() => {
     ElNotification({
       title: '提示',
       message: '复制失败，请重试',
-      type: 'fail',
+      type: 'error',
     })
   })
 })
@@ -269,14 +269,15 @@ onMounted(() => {
 
 <style lang="less" scoped>
 .box-card {
+  margin-bottom: 20px;
+  &.ps-card {
+    width: 540px;
+  }
   &:not(:first-child) {
     margin-left: 20px;
   }
   .card-header {
     font-size: 15px;
-    font-weight: 600;
-  }
-  :deep(.el-form-item__label) {
     font-weight: 600;
   }
   .form-item {
@@ -312,36 +313,16 @@ onMounted(() => {
 }
 .show-wrapper {
   width: 310px;
-  height: 200px;
   overflow: hidden;
+  padding-bottom: 10px;
   .show-box {
     width: 100px;
     height: 100px;
     font-size: 20px;
   }
 }
-.code-wrapper {
-  position: relative;
-  overflow: hidden;
-  margin-top: 20px;
-  :deep(.hljs) {
-    width: 530px;
-    height: 180px;
-  }
-  .btn {
-    position: absolute;
-    right: 10px;
-    bottom: 10px;
-    z-index: 100;
-    color: #fff;
-    font-size: 18px;
-    cursor: pointer;
-    &.copy-btn {
-      right: 10px;
-    }
-    &.refresh-btn {
-      right: 50px;
-    }
-  }
+:deep(.hljs) {
+  width: 540px;
+  height: 180px;
 }
 </style>

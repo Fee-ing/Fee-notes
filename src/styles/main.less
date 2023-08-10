@@ -3,6 +3,23 @@
   padding: 0;
   box-sizing: border-box;
 }
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-button {
+  display: none;
+}
+::-webkit-scrollbar-track {
+  background: #aaa;
+}
+::-webkit-scrollbar-track-piece {
+  background: #fff;
+}
+::-webkit-scrollbar-thumb {
+  background: #aaa;
+  border-radius: 4px;
+}
 html, body {
   position: relative;
   height: 100%;
@@ -33,6 +50,28 @@ html, body {
     font-size: 15px;
   }
 }
+.page-code {
+  position: relative;
+  overflow: hidden;
+  .btn {
+    position: absolute;
+    right: 10px;
+    bottom: 15px;
+    z-index: 100;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    &.copy-btn {
+      right: 10px;
+    }
+    &.refresh-btn {
+      right: 50px;
+    }
+  }
+}
 .over-h {
   overflow: hidden;
+}
+.el-form-item__label {
+  font-weight: 600;
 }

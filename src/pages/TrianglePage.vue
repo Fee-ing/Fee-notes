@@ -139,7 +139,7 @@
       <div class="show-wrapper">
         <div class="show-triangle" :style="triangleStyle"></div>
       </div>
-      <div class="code-wrapper">
+      <div class="page-code">
         <highlightjs
           autodetect
           :code="triangleCode"
@@ -185,7 +185,7 @@ const initialData = {
   bottomHeight: 100
 }
 
-const form = reactive({ ...initialData })
+const form = reactive(JSON.parse(JSON.stringify(initialData)))
 
 const disabledWidth = computed(() => {
   return (['left', 'right'].includes(form.direction) && form.shape === '2') || (['top', 'bottom'].includes(form.direction) && form.shape === '3')
@@ -336,16 +336,13 @@ onMounted(() => {
     ElNotification({
       title: '提示',
       message: '复制失败，请重试',
-      type: 'fail',
+      type: 'error',
     })
   })
 })
 </script>
 
 <style lang="less" scoped>
-:deep(.el-form-item__label) {
-  font-weight: 600;
-}
 .triangle-box {
   padding: 150px 120px 130px;
   .box-content {
@@ -480,7 +477,7 @@ onMounted(() => {
     position: absolute;
     left: -112px;
     top: -88px;
-    /deep/ .el-radio__label {
+    :deep(.el-radio__label) {
       padding: 0;
       position: relative;
       top: -15px;
@@ -492,7 +489,7 @@ onMounted(() => {
     position: absolute;
     right: -145px;
     top: -88px;
-    /deep/ .el-radio__label {
+    :deep(.el-radio__label) {
       padding: 0;
       position: relative;
       top: -15px;
@@ -580,31 +577,12 @@ onMounted(() => {
       top: 0;
     }
   }
-  .code-wrapper {
-    position: relative;
+  :deep(.hljs) {
+    width: 440px;
+    min-height: 150px;
+    word-break: break-all;
     overflow: hidden;
-    :deep(.hljs) {
-      width: 440px;
-      min-height: 150px;
-      word-break: break-all;
-      overflow: hidden;
-      white-space: break-spaces;
-    }
-    .btn {
-      position: absolute;
-      right: 10px;
-      bottom: 10px;
-      z-index: 100;
-      color: #fff;
-      font-size: 18px;
-      cursor: pointer;
-      &.copy-btn {
-        right: 10px;
-      }
-      &.refresh-btn {
-        right: 50px;
-      }
-    }
+    white-space: break-spaces;
   }
 }
 </style>

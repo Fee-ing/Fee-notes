@@ -39,6 +39,16 @@ const webList = [
     description: '小程序绘制图片的插件'
   },
   {
+    title: 'QRCodeJS',
+    link: 'https://github.com/davidshimjs/qrcodejs',
+    description: '生成二维码'
+  },
+  {
+    title: 'JsBarcode',
+    link: 'https://github.com/lindell/JsBarcode',
+    description: '生成条形码'
+  },
+  {
     title: 'HighlightJS',
     link: 'https://github.com/highlightjs/highlight.js',
     description: '语法高亮插件'

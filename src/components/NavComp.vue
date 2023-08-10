@@ -52,6 +52,10 @@ const navConfig = [
     icon: 'SetUp',
     children: [
       {
+        title: '二维码生成',
+        path: '/qrcode'
+      },
+      {
         title: 'CSS三角形生成器',
         path: '/triangle'
       },
