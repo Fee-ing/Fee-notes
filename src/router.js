@@ -3,7 +3,7 @@ import Plugins from '@/pages/PluginsPage.vue'
 import Triangle from '@/pages/TrianglePage.vue'
 import Shadow from '@/pages/ShadowPage.vue'
 import Qrcode from '@/pages/QrcodePage.vue'
-import Code from '@/pages/CodePage.vue'
+import Beautify from '@/pages/BeautifyPage.vue'
 
 const routes = [
   {
@@ -42,10 +42,10 @@ const routes = [
     }
   },
   {
-    path: '/code',
-    component: Code,
+    path: '/beautify',
+    component: Beautify,
     meta: {
-      title: '代码美化'
+      title: '代码格式化'
     }
   }
 ]

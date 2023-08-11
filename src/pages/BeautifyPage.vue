@@ -1,6 +1,12 @@
 <template>
   <div class="page-wrapper flex">
-    <el-form label-position="top" :model="form.options" size="small">
+    <el-form class="form-wrapper" label-position="top" :model="form.options" size="small">
+      <el-form-item>
+        <el-button type="primary" :loading="loading" @click="handleStart">美化</el-button>
+        <el-button class="copy-btn" type="success" text bg :data-clipboard-text="form.beautify">复制</el-button>
+        <el-button type="warning" text bg @click="handleClear">清空</el-button>
+        <el-button type="danger" text bg @click="handleReset">重置</el-button>
+      </el-form-item>
       <el-form-item label="代码类型：">
         <el-select v-model="form.options.parser">
           <el-option
@@ -65,12 +71,6 @@
       </el-form-item>
       <el-form-item label="在HTML、Vue和JSX文件中强制每行单一属性：">
         <el-switch v-model="form.options.singleAttributePerLine" />
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" :loading="loading" @click="handleStart">美化</el-button>
-        <el-button class="copy-btn" type="success" text bg :data-clipboard-text="form.beautify">复制</el-button>
-        <el-button type="warning" text bg @click="handleClear">清空</el-button>
-        <el-button type="danger" text bg @click="handleReset">重置</el-button>
       </el-form-item>
     </el-form>
     <el-input class="code-input flex-1" v-model="form.code" type="textarea" placeholder="请输入代码" resize="none" />
@@ -170,7 +170,7 @@ const handleStart = async () => {
     console.log(err)
     ElNotification({
       title: '提示',
-      message: '格式化失败',
+      message: '格式化失败，请检查代码类型',
       type: 'error',
     })
     loading.value = false
@@ -210,6 +210,10 @@ onMounted(() => {
 </script>
 
 <style lang="less" scoped>
+.form-wrapper {
+  max-height: 100%;
+  overflow-y: auto;
+}
 .code-input {
   margin-left: 20px;
   :deep(.el-textarea__inner) {
