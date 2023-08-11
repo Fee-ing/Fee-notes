@@ -12,14 +12,9 @@
 
 整理了一些自己常用的网站、插件和工具
 
-![image](https://github.com/Fee-ing/previewImages/blob/master/Fee-notes/1.png)
-![image](https://github.com/Fee-ing/previewImages/blob/master/Fee-notes/2.png)
-![image](https://github.com/Fee-ing/previewImages/blob/master/Fee-notes/3.png)
-![image](https://github.com/Fee-ing/previewImages/blob/master/Fee-notes/4.png)
+![image](https://github.com/Fee-ing/previewImages/blob/master/Fee-notes/1.png)![image](https://github.com/Fee-ing/previewImages/blob/master/Fee-notes/2.png)![image](https://github.com/Fee-ing/previewImages/blob/master/Fee-notes/3.png)![image](https://github.com/Fee-ing/previewImages/blob/master/Fee-notes/4.png)
 
-![image](https://github.com/Fee-ing/previewImages/blob/master/Fee-notes/5.png)
-![image](https://github.com/Fee-ing/previewImages/blob/master/Fee-notes/6.png)
-![image](https://github.com/Fee-ing/previewImages/blob/master/Fee-notes/7.png)
+![image](https://github.com/Fee-ing/previewImages/blob/master/Fee-notes/5.png)![image](https://github.com/Fee-ing/previewImages/blob/master/Fee-notes/6.png)![image](https://github.com/Fee-ing/previewImages/blob/master/Fee-notes/7.png)
 
 ## Project setup
 
