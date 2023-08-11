@@ -52,6 +52,10 @@ const navConfig = [
     icon: 'SetUp',
     children: [
       {
+        title: '代码美化',
+        path: '/code'
+      },
+      {
         title: '二维码生成',
         path: '/qrcode'
       },

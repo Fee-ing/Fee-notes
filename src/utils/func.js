@@ -18,3 +18,27 @@ export function download (url, name) {
   }
   aLink.dispatchEvent(event)
 }
+
+export function loadJs (src) {
+  return new Promise((resolve) => {
+    const scripts = document.querySelectorAll('body>script')
+    for (let index = 0; index < scripts.length; index++) {
+      if (scripts[index].getAttribute('src') === src) {
+        resolve(true)
+        return
+      }
+    }
+    
+    let script = document.createElement('script')
+    script.type = 'text/javascript'
+    script.src= src
+    document.body.appendChild(script)
+      
+    script.onload = () => {
+      resolve(true)
+    }
+    script.onerror = () => {
+      resolve(false)
+    }
+  })
+}

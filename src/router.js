@@ -3,6 +3,7 @@ import Plugins from '@/pages/PluginsPage.vue'
 import Triangle from '@/pages/TrianglePage.vue'
 import Shadow from '@/pages/ShadowPage.vue'
 import Qrcode from '@/pages/QrcodePage.vue'
+import Code from '@/pages/CodePage.vue'
 
 const routes = [
   {
@@ -38,6 +39,13 @@ const routes = [
     component: Qrcode,
     meta: {
       title: '二维码在线生成'
+    }
+  },
+  {
+    path: '/code',
+    component: Code,
+    meta: {
+      title: '代码美化'
     }
   }
 ]

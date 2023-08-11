@@ -42,7 +42,11 @@
     "parserOptions": {
       "parser": "@babel/eslint-parser"
     },
-    "rules": {}
+    "rules": {},
+    "globals": {
+      "prettier": true,
+      "prettierPlugins": true
+    }
   },
   "browserslist": [
     "> 1%",
