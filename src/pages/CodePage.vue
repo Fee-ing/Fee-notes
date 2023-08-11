@@ -1,8 +1,8 @@
 <template>
   <div class="page-wrapper flex">
-    <el-form label-position="top" :model="form" size="small">
+    <el-form label-position="top" :model="form.options" size="small">
       <el-form-item label="代码类型：">
-        <el-select v-model="form.parser">
+        <el-select v-model="form.options.parser">
           <el-option
             v-for="item in codeParserOptions"
             :key="item.value"
@@ -13,7 +13,7 @@
       </el-form-item>
       <el-form-item label="单行长度：">
         <el-input-number
-          v-model="form.printWidth"
+          v-model="form.options.printWidth"
           :min="1"
           :max="1000"
           :step="1"
@@ -22,7 +22,7 @@
       </el-form-item>
       <el-form-item label="缩进空格：">
         <el-input-number
-          v-model="form.tabWidth"
+          v-model="form.options.tabWidth"
           :min="1"
           :max="4"
           :step="1"
@@ -30,42 +30,45 @@
         />
       </el-form-item>
       <el-form-item label="句末使用分号：">
-        <el-switch v-model="form.semi" />
+        <el-switch v-model="form.options.semi" />
       </el-form-item>
       <el-form-item label="使用单引号：">
-        <el-switch v-model="form.singleQuote" />
+        <el-switch v-model="form.options.singleQuote" />
       </el-form-item>
       <el-form-item label="JSX中使用单引号：">
-        <el-switch v-model="form.jsxSingleQuote" />
+        <el-switch v-model="form.options.jsxSingleQuote" />
       </el-form-item>
       <el-form-item label="对象前后添加空格：">
-        <el-switch v-model="form.bracketSpacing" />
+        <el-switch v-model="form.options.bracketSpacing" />
       </el-form-item>
       <el-form-item label="多属性HTML标签的>折行放置：">
-        <el-switch v-model="form.bracketSameLine" />
+        <el-switch v-model="form.options.bracketSameLine" />
       </el-form-item>
       <el-form-item label="JSX中的多属性HTML标签的>折行放置：">
-        <el-switch v-model="form.jsxBracketSameLine" />
+        <el-switch v-model="form.options.jsxBracketSameLine" />
       </el-form-item>
       <el-form-item label="箭头函数参数包裹括号：">
-        <el-switch v-model="form.arrowParens" />
+        <el-radio-group v-model="form.options.arrowParens">
+          <el-radio label="always">css</el-radio>
+          <el-radio label="avoid">avoid</el-radio>
+        </el-radio-group>
       </el-form-item>
       <el-form-item label="对HTML全局空白的敏感度：">
-        <el-radio-group v-model="form.htmlWhitespaceSensitivity">
+        <el-radio-group v-model="form.options.htmlWhitespaceSensitivity">
           <el-radio label="css">css</el-radio>
           <el-radio label="strict">strict</el-radio>
           <el-radio label="ignore">ignore</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="对Vue文件中的script、style标签缩进：">
-        <el-switch v-model="form.vueIndentScriptAndStyle" />
+        <el-switch v-model="form.options.vueIndentScriptAndStyle" />
       </el-form-item>
       <el-form-item label="在HTML、Vue和JSX文件中强制每行单一属性：">
-        <el-switch v-model="form.singleAttributePerLine" />
+        <el-switch v-model="form.options.singleAttributePerLine" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" :loading="loading" @click="handleStart">美化</el-button>
-        <el-button class="copy-btn" type="success" text bg :data-clipboard-text="beautifyCode">复制</el-button>
+        <el-button class="copy-btn" type="success" text bg :data-clipboard-text="form.beautify">复制</el-button>
         <el-button type="warning" text bg @click="handleClear">清空</el-button>
         <el-button type="danger" text bg @click="handleReset">重置</el-button>
       </el-form-item>
@@ -74,7 +77,7 @@
     <div class="code-wrapper flex-1">
       <highlightjs
         autodetect
-        :code="beautifyCode"
+        :code="form.beautify"
       ></highlightjs>
     </div>
   </div>
@@ -103,33 +106,36 @@ const codeParserOptions = [
 
 const initialData = {
   code: '',
-  parser: 'babel',
-  printWidth: 80,
-  tabWidth: 2,
-  semi: false,
-  singleQuote: true,
-  jsxSingleQuote: true,
-  bracketSpacing: true,
-  bracketSameLine: true,
-  jsxBracketSameLine: true,
-  arrowParens: true,
-  htmlWhitespaceSensitivity: 'css',
-  vueIndentScriptAndStyle: false,
-  singleAttributePerLine: false
+  beautify: '',
+  options: {
+    parser: 'babel',
+    printWidth: 80,
+    tabWidth: 2,
+    semi: false,
+    singleQuote: true,
+    jsxSingleQuote: true,
+    bracketSpacing: true,
+    bracketSameLine: true,
+    jsxBracketSameLine: true,
+    arrowParens: 'always',
+    htmlWhitespaceSensitivity: 'css',
+    vueIndentScriptAndStyle: false,
+    singleAttributePerLine: false
+  }
 }
 
 const form = reactive(JSON.parse(JSON.stringify(initialData)))
 
-const beautifyCode = ref('')
-
 const loading = ref(false)
 
 const handleStart = async () => {
-  const { code, parser } = form
+  const { code, options } = form
   if (code === '') return
 
   loading.value = true
+  form.beautify = ''
 
+  const { parser } = options
   let scripts = ['standalone', 'plugins/babel', 'plugins/estree']
   if (['html', 'vue'].includes(parser)) {
     scripts = [ ...scripts, 'plugins/html' ]
@@ -154,25 +160,33 @@ const handleStart = async () => {
       return
     }
   }
-  beautifyCode.value = await prettier.format(code, {
-    parser,
+  prettier.format(code, {
+    ...options,
     plugins: prettierPlugins,
+  }).then((res) => {
+    form.beautify = res
+    loading.value = false
+  }).catch((err) => {
+    console.log(err)
+    ElNotification({
+      title: '提示',
+      message: '格式化失败',
+      type: 'error',
+    })
+    loading.value = false
   })
-  loading.value = false
+  
 }
 
 const handleClear = () => {
   form.code = ''
-  beautifyCode.value = ''
+  form.beautify = ''
 }
 
 const handleReset = () => {
-  for (const key in initialData) {
-    if (Object.hasOwnProperty.call(initialData, key)) {
-      form[key] = initialData[key]
-    }
-  }
-  beautifyCode.value = ''
+  form.options = JSON.parse(JSON.stringify(initialData.options))
+  form.code = ''
+  form.beautify = ''
 }
 
 onMounted(() => {
