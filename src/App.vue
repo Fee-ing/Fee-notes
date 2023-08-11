@@ -3,6 +3,10 @@
     <Nav></Nav>
     <router-view class="flex-1 over-h" v-slot="{ Component }">
       <keep-alive>
+<<<<<<< HEAD
+=======
+        <!-- <component v-if="$route.meta.keepAlive" :is="Component" /> -->
+>>>>>>> d1be8d599d61346e86a5012a973b11458da097bc
         <component :is="Component" />
       </keep-alive>
     </router-view>
