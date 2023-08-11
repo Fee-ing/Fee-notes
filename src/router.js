@@ -4,6 +4,7 @@ import Triangle from '@/pages/TrianglePage.vue'
 import Shadow from '@/pages/ShadowPage.vue'
 import Qrcode from '@/pages/QrcodePage.vue'
 import Beautify from '@/pages/BeautifyPage.vue'
+import ParseQrcode from '@/pages/ParseQrcode.vue'
 
 const routes = [
   {
@@ -46,6 +47,14 @@ const routes = [
     component: Beautify,
     meta: {
       title: '代码格式化'
+    }
+  },
+  {
+    path: '/parse-qrcode',
+    component: ParseQrcode,
+    meta: {
+      title: '解析二维码',
+      keepAlive: true
     }
   }
 ]

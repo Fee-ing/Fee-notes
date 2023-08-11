@@ -45,7 +45,8 @@
     "rules": {},
     "globals": {
       "prettier": true,
-      "prettierPlugins": true
+      "prettierPlugins": true,
+      "cv": true
     }
   },
   "browserslist": [

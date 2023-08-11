@@ -1,7 +1,12 @@
 <template>
   <div class="app-wrapper flex over-h">
     <Nav></Nav>
-    <router-view class="flex-1 over-h"></router-view>
+    <router-view class="flex-1 over-h" v-slot="{ Component }">
+      <keep-alive>
+        <component v-if="$route.meta.keepAlive" :is="Component" />
+      </keep-alive>
+    </router-view>
+    <router-view v-if="!$route.meta.keepAlive" class="flex-1 over-h" ></router-view>
   </div>
 </template>
 

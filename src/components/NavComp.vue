@@ -60,6 +60,10 @@ const navConfig = [
         path: '/qrcode'
       },
       {
+        title: '二维码解析',
+        path: '/parse-qrcode'
+      },
+      {
         title: 'CSS三角形生成器',
         path: '/triangle'
       },

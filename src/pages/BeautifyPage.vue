@@ -1,5 +1,12 @@
 <template>
   <div class="page-wrapper flex">
+    <el-input class="code-input flex-1" v-model="form.code" type="textarea" placeholder="请输入代码" resize="none" />
+    <div class="code-wrapper flex-1">
+      <highlightjs
+        autodetect
+        :code="form.beautify"
+      ></highlightjs>
+    </div>
     <el-form class="form-wrapper" label-position="top" :model="form.options" size="small">
       <el-form-item>
         <el-button type="primary" :loading="loading" @click="handleStart">美化</el-button>
@@ -73,13 +80,6 @@
         <el-switch v-model="form.options.singleAttributePerLine" />
       </el-form-item>
     </el-form>
-    <el-input class="code-input flex-1" v-model="form.code" type="textarea" placeholder="请输入代码" resize="none" />
-    <div class="code-wrapper flex-1">
-      <highlightjs
-        autodetect
-        :code="form.beautify"
-      ></highlightjs>
-    </div>
   </div>
 </template>
 
@@ -215,16 +215,13 @@ onMounted(() => {
   overflow-y: auto;
 }
 .code-input {
-  margin-left: 20px;
+  margin-right: 20px;
   :deep(.el-textarea__inner) {
     height: 100%;
-    &::-webkit-scrollbar {
-      width: 0;
-    }
   }
 }
 .code-wrapper {
-  margin-left: 20px;
+  margin-right: 40px;
   :deep(pre) {
     height: 100%;
   }
