@@ -1,6 +1,6 @@
 <template>
   <div class="page-wrapper page-triangle flex">
-    <el-form label-width="60px" :model="form" size="small">
+    <el-form label-width="60px" :model="form">
       <el-form-item label="方向：">
         <div class="triangle-box">
           <div class="box-content">

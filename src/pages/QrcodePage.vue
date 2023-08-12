@@ -1,6 +1,6 @@
 <template>
   <div class="page-wrapper page-qrcode flex">
-    <el-form class="form-wrapper" label-width="100px" :model="form" size="small">
+    <el-form class="form-wrapper" label-width="100px" :model="form">
       <el-form-item label="类型：">
         <el-radio-group v-model="form.type">
           <el-radio-button label="qrcode">二维码</el-radio-button>

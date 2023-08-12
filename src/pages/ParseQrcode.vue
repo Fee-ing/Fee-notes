@@ -1,29 +1,22 @@
 <template>
   <div class="page-wrapper page-parse-qrcode">
     <canvas class="code-canvas" id="qrcode"></canvas>
-    <el-form class="form-wrapper" label-position="top" size="small">
+    <el-form class="form-wrapper" label-position="top">
       <el-form-item label="上传图片">
-        <div>
-          <el-upload
-            action="#"
-            :auto-upload="false"
-            :limit="1"
-            :show-file-list="false"
-            :on-change="handleUpload"
-            ref="uploadEle"
-          >
-            <el-button type="primary" plain>点击上传</el-button>
-          </el-upload>
-          <el-image class="image-wrapper" :src="path" fit="cover">
-            <template #error>
-              <div class="image-slot flex-vh">
-                <el-icon>
-                  <component :is="'Picture'"></component>
-                </el-icon>
-              </div>
-            </template>
-          </el-image>
-        </div>
+        <el-upload
+          class="uploader-wrapper"
+          action="#"
+          :auto-upload="false"
+          :limit="1"
+          :show-file-list="false"
+          :on-change="handleUpload"
+          ref="uploadEle"
+        >
+          <img v-if="path" :src="path" class="uploader-image" />
+          <el-icon v-else class="uploader-icon">
+            <component :is="'Plus'"></component>
+          </el-icon>
+        </el-upload>
       </el-form-item>
       <el-form-item label="识别结果">
         <el-input v-model="result" type="textarea" resize="none" />
@@ -142,6 +135,29 @@ onMounted(async () => {
     width: 400px;
     :deep(.el-textarea__inner) {
       height: 100px;
+    }
+  }
+  .uploader-wrapper {
+    :deep(.el-upload) {
+      border: 1px dashed var(--el-border-color);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: var(--el-transition-duration-fast);
+      &:hover {
+        border-color: var(--el-color-primary);
+      }
+    }
+    .uploader-image {
+      height: 200px;
+      width: auto;
+    }
+    .uploader-icon {
+      width: 200px;
+      height: 200px;
+      font-size: 28px;
+      color: #8c939d;
+      text-align: center;
     }
   }
   .image-wrapper {

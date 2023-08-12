@@ -5,7 +5,7 @@
         <template #header>
           <div class="card-header">Photoshop投影参数</div>
         </template>
-        <el-form label-width="100px" :model="psForm" size="small">
+        <el-form label-width="90px" :model="psForm">
           <el-form-item class="form-item multi-input" label="颜色：">
             <el-input-number
               class="input-item item1"
@@ -88,7 +88,7 @@
         <template #header>
           <div class="card-header">CSS3参数</div>
         </template>
-        <el-form label-width="100px" :model="cssForm" size="small">
+        <el-form label-width="100px" :model="cssForm">
           <el-form-item class="form-item" label="内阴影：">
             <el-switch v-model="cssForm.inset" />
           </el-form-item>
@@ -284,6 +284,9 @@ onMounted(() => {
     .form-item {
       &.multi-input {
         margin-bottom: 30px;
+        :deep(.el-form-item__content) {
+          flex-wrap: nowrap;
+        }
       }
       .item-text {
         margin-left: 10px;

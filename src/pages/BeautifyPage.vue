@@ -7,9 +7,9 @@
         :code="beautifyCode"
       ></highlightjs>
     </div>
-    <el-form class="form-wrapper" label-position="top" :model="form.options" size="small">
+    <el-form class="form-wrapper" label-position="top" :model="form.options">
       <el-form-item>
-        <el-button type="primary" size="large" :loading="loading" @click="handleStart">美化</el-button>
+        <el-button type="primary" :loading="loading" @click="handleStart">美化</el-button>
         <el-button class="copy-btn" type="success" text bg :data-clipboard-text="form.beautify">复制</el-button>
         <el-button type="warning" text bg @click="handleClear">清空</el-button>
         <el-button type="danger" text bg @click="handleReset">重置</el-button>
@@ -48,17 +48,11 @@
       <el-form-item label="使用单引号：">
         <el-switch v-model="form.options.singleQuote" />
       </el-form-item>
-      <el-form-item label="JSX中使用单引号：">
-        <el-switch v-model="form.options.jsxSingleQuote" />
-      </el-form-item>
       <el-form-item label="对象前后添加空格：">
         <el-switch v-model="form.options.bracketSpacing" />
       </el-form-item>
       <el-form-item label="多属性HTML标签的>折行放置：">
         <el-switch v-model="form.options.bracketSameLine" />
-      </el-form-item>
-      <el-form-item label="JSX中的多属性HTML标签的>折行放置：">
-        <el-switch v-model="form.options.jsxBracketSameLine" />
       </el-form-item>
       <el-form-item label="箭头函数参数包裹括号：">
         <el-radio-group v-model="form.options.arrowParens">
@@ -66,19 +60,29 @@
           <el-radio label="avoid">avoid</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="对HTML全局空白的敏感度：">
-        <el-radio-group v-model="form.options.htmlWhitespaceSensitivity">
-          <el-radio label="css">css</el-radio>
-          <el-radio label="strict">strict</el-radio>
-          <el-radio label="ignore">ignore</el-radio>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item label="对Vue文件中的script、style标签缩进：">
-        <el-switch v-model="form.options.vueIndentScriptAndStyle" />
-      </el-form-item>
-      <el-form-item label="在HTML、Vue和JSX文件中强制每行单一属性：">
-        <el-switch v-model="form.options.singleAttributePerLine" />
-      </el-form-item>
+      <el-collapse>
+        <el-collapse-item title="其他设置">
+          <el-form-item label="JSX中使用单引号：">
+            <el-switch v-model="form.options.jsxSingleQuote" />
+          </el-form-item>
+          <el-form-item label="JSX中的多属性HTML标签的>折行放置：">
+            <el-switch v-model="form.options.jsxBracketSameLine" />
+          </el-form-item>
+          <el-form-item label="对HTML全局空白的敏感度：">
+            <el-radio-group v-model="form.options.htmlWhitespaceSensitivity">
+              <el-radio label="css">css</el-radio>
+              <el-radio label="strict">strict</el-radio>
+              <el-radio label="ignore">ignore</el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="对Vue文件中的script、style标签缩进：">
+            <el-switch v-model="form.options.vueIndentScriptAndStyle" />
+          </el-form-item>
+          <el-form-item label="在HTML、Vue和JSX文件中强制每行单一属性：">
+            <el-switch v-model="form.options.singleAttributePerLine" />
+          </el-form-item>
+        </el-collapse-item>
+      </el-collapse>
     </el-form>
   </div>
 </template>
@@ -217,9 +221,19 @@ onMounted(() => {
 .page-beautify {
   padding: 0;
   .form-wrapper {
+    width: 340px;
     max-height: 100%;
     overflow-y: auto;
-    padding: 20px 20px 20px 0;
+    padding-top: 20px;
+    :deep(.el-collapse-item__header) {
+      border-bottom: none;
+      font-weight: 600;
+      color: var(--el-menu-active-color);
+      font-size: var(--el-form-label-font-size);
+    }
+    :deep(.el-collapse-item__wrap) {
+      border-bottom: none;
+    }
   }
   .code-input {
     background-color: rgba(64, 158, 255, .1);
