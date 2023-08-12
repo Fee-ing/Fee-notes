@@ -5,6 +5,7 @@ import Shadow from '@/pages/ShadowPage.vue'
 import Qrcode from '@/pages/QrcodePage.vue'
 import Beautify from '@/pages/BeautifyPage.vue'
 import ParseQrcode from '@/pages/ParseQrcode.vue'
+import Regexp from '@/pages/RegexpPage.vue'
 
 const routes = [
   {
@@ -55,6 +56,13 @@ const routes = [
     meta: {
       title: '解析二维码',
       keepAlive: true
+    }
+  },
+  {
+    path: '/regexp',
+    component: Regexp,
+    meta: {
+      title: '正则表达式'
     }
   }
 ]

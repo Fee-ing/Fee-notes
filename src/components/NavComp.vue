@@ -64,6 +64,10 @@ const navConfig = [
         path: '/parse-qrcode'
       },
       {
+        title: '正则表达式',
+        path: '/regexp'
+      },
+      {
         title: 'CSS三角形生成器',
         path: '/triangle'
       },
@@ -91,6 +95,9 @@ const handleClick = (path, index) => {
 .app-nav {
   width: 200px;
   height: 100%;
+  :deep(.el-menu-item) {
+    font-size: 15px;
+  }
   .avatar {
     width: 80px;
     height: 80px;
