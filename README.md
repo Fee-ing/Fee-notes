@@ -5,6 +5,7 @@
 - 基于 Prettier 的在线代码格式化工具；
 - 基于[QRcodeJS](https://github.com/davidshimjs/qrcodejs)、[JsBarcode](https://github.com/lindell/JsBarcode)和[ArtQRCode](https://github.com/252860883/ArtQRCode)实现的二维码、条形码在线生成工具;
 - 参考[opencv-js-qrcode](https://github.com/leidenglai/opencv-js-qrcode)项目实现的在线二维码解析功能；
+- 正则表达式工具
 - 参考[http://tool.uis.cc/sjmaker/](http://tool.uis.cc/sjmaker/)实现的 CSS 三角形生成器；
 - 参考[https://psd2css.mezw.com/](https://psd2css.mezw.com/)实现的 PS 投影转 CSS3 功能；
 
