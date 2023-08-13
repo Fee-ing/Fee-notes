@@ -178,9 +178,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted } from 'vue'
-import ClipboardJS from 'clipboard'
-import { ElNotification } from 'element-plus'
+import { ref, computed, watch } from 'vue'
 
 const initialData = {
   colorR: 0,
@@ -246,25 +244,6 @@ const handleResetData = () => {
     isChanged.value = false
   }
 }
-
-onMounted(() => {
-  const clipboard = new ClipboardJS('.copy-btn')
-  clipboard.on('success', function (e) {
-    ElNotification({
-      title: '提示',
-      message: '复制成功',
-      type: 'success',
-    })
-    e.clearSelection()
-  })
-  clipboard.on('error', function () {
-    ElNotification({
-      title: '提示',
-      message: '复制失败，请重试',
-      type: 'error',
-    })
-  })
-})
 </script>
 
 <style lang="less" scoped>

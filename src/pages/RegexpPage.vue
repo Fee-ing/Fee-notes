@@ -36,16 +36,20 @@
         :name="data.name"
       >
         <div
-          class="regexp-item flex-v over-h"
+          class="regexp-item over-h"
           v-for="(item, col) in data.children"
           :key="col"
-          @click="handleChoose(item.value)"
         >
-          <div class="item-title">{{ item.label }}：</div>
+          <div class="item-title flex-v">
+            <span>{{ item.label }}：</span>
+            <el-icon class="copy-btn" title="复制" :data-clipboard-text="item.value">
+              <component :is="'CopyDocument'"></component>
+            </el-icon>
+            <el-icon class="copy-btn" title="填入" @click="handleChoose(item.value)">
+              <component :is="'EditPen'"></component>
+            </el-icon>
+          </div>
           <div class="item-content">{{ item.value }}</div>
-          <el-icon class="copy-btn" :data-clipboard-text="item.value">
-            <component :is="'CopyDocument'"></component>
-          </el-icon>
         </div>
       </el-collapse-item>
     </el-collapse>
@@ -53,9 +57,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import ClipboardJS from 'clipboard'
-import { ElNotification } from 'element-plus'
+import { ref, computed } from 'vue'
 
 const regexpList = [
   {
@@ -263,25 +265,6 @@ const handleChoose = (val) => {
   form.value.input = val
   regexpExec()
 }
-
-onMounted(() => {
-  const clipboard = new ClipboardJS('.copy-btn')
-  clipboard.on('success', function (e) {
-    ElNotification({
-      title: '提示',
-      message: '复制成功',
-      type: 'success',
-    })
-    e.clearSelection()
-  })
-  clipboard.on('error', function () {
-    ElNotification({
-      title: '提示',
-      message: '复制失败，请重试',
-      type: 'error',
-    })
-  })
-})
 </script>
 
 <style lang="less" scoped>
@@ -362,6 +345,7 @@ onMounted(() => {
     }
   }
   .regexp-wrapper {
+    max-width: 400px;
     position: relative;
     top: -13px;
     overflow-y: auto;
@@ -371,6 +355,7 @@ onMounted(() => {
       border: none;
       font-weight: 600;
       font-size: 14px;
+      color: var(--el-color-primary);
     }
     :deep(.el-collapse-item__wrap) {
       border: none;
@@ -379,23 +364,26 @@ onMounted(() => {
       padding-bottom: 0;
     }
     .regexp-item {
-      min-height: 30px;
-      cursor: pointer;
       line-height: 1;
+      padding: 5px 0;
       &:hover {
         .copy-btn {
           display: block;
         }
       }
       .item-title {
-        white-space: nowrap;
-        color: #999;
+        height: 30px;
+        font-weight: 600;
       }
       .item-content {
         word-break: break-all;
         word-wrap: break-word;
       }
       .copy-btn {
+        width: auto;
+        height: auto;
+        padding: 5px;
+        cursor: pointer;
         margin-left: 10px;
         display: none;
         font-size: 16px;

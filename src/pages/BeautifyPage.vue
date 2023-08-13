@@ -88,9 +88,8 @@
 </template>
 
 <script setup>
-import { onMounted, reactive, ref, computed } from 'vue'
+import { reactive, ref, computed } from 'vue'
 import { ElNotification } from 'element-plus'
-import ClipboardJS from 'clipboard'
 import { loadJs } from '../utils/func'
 
 const codeParserOptions = [
@@ -196,25 +195,6 @@ const handleReset = () => {
   form.code = ''
   form.beautify = ''
 }
-
-onMounted(() => {
-  const clipboard = new ClipboardJS('.copy-btn')
-  clipboard.on('success', function (e) {
-    ElNotification({
-      title: '提示',
-      message: '复制成功',
-      type: 'success',
-    })
-    e.clearSelection()
-  })
-  clipboard.on('error', function () {
-    ElNotification({
-      title: '提示',
-      message: '复制失败，请重试',
-      type: 'error',
-    })
-  })
-})
 </script>
 
 <style lang="less" scoped>

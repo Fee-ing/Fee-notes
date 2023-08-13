@@ -168,9 +168,7 @@
 </template>
 
 <script setup>
-import { reactive, computed, onMounted } from 'vue'
-import ClipboardJS from 'clipboard'
-import { ElNotification } from 'element-plus'
+import { reactive, computed } from 'vue'
 import { stripNumber } from '../utils/func'
 
 const initialData = {
@@ -321,25 +319,6 @@ const handleResetData = () => {
     }
   }
 }
-
-onMounted(() => {
-  const clipboard = new ClipboardJS('.copy-btn')
-  clipboard.on('success', function (e) {
-    ElNotification({
-      title: '提示',
-      message: '复制成功',
-      type: 'success',
-    })
-    e.clearSelection()
-  })
-  clipboard.on('error', function () {
-    ElNotification({
-      title: '提示',
-      message: '复制失败，请重试',
-      type: 'error',
-    })
-  })
-})
 </script>
 
 <style lang="less" scoped>

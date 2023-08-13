@@ -32,7 +32,6 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { ElNotification } from 'element-plus'
-import ClipboardJS from 'clipboard'
 
 var CV = null
 var qrcodeDetector = null
@@ -102,23 +101,6 @@ onMounted(async () => {
       'sr.caffemodel'
     )
   }
-
-  const clipboard = new ClipboardJS('.copy-btn')
-  clipboard.on('success', function (e) {
-    ElNotification({
-      title: '提示',
-      message: '复制成功',
-      type: 'success',
-    })
-    e.clearSelection()
-  })
-  clipboard.on('error', function () {
-    ElNotification({
-      title: '提示',
-      message: '复制失败，请重试',
-      type: 'error',
-    })
-  })
 })
 </script>
 
