@@ -389,6 +389,7 @@ onMounted(() => {
       }
       .item-title {
         white-space: nowrap;
+        color: #999;
       }
       .item-content {
         word-break: break-all;
