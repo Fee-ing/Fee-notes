@@ -16,7 +16,7 @@
 |||||
 |--|--|--|--|
 | <img src="https://github.com/Fee-ing/previewImages/blob/master/Fee-notes/1.png"> | <img src="https://github.com/Fee-ing/previewImages/blob/master/Fee-notes/2.png"> | <img src="https://github.com/Fee-ing/previewImages/blob/master/Fee-notes/3.png"> | <img src="https://github.com/Fee-ing/previewImages/blob/master/Fee-notes/4.png"> |
-| <img src="https://github.com/Fee-ing/previewImages/blob/master/Fee-notes/5.png"> | <img src="https://github.com/Fee-ing/previewImages/blob/master/Fee-notes/6.png"> | <img src="https://github.com/Fee-ing/previewImages/blob/master/Fee-notes/7.png"> | |
+| <img src="https://github.com/Fee-ing/previewImages/blob/master/Fee-notes/5.png"> | <img src="https://github.com/Fee-ing/previewImages/blob/master/Fee-notes/8.png"> | <img src="https://github.com/Fee-ing/previewImages/blob/master/Fee-notes/6.png"> | <img src="https://github.com/Fee-ing/previewImages/blob/master/Fee-notes/7.png"> |
 |||||
 
 ## Project setup
