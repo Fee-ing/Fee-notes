@@ -1,8 +1,19 @@
 import { createApp, createVNode } from 'vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
+
+import hljs from 'highlight.js/lib/core'
+import hljsVuePlugin from '@highlightjs/vue-plugin'
+import javascript from 'highlight.js/lib/languages/javascript'
+import typescript from 'highlight.js/lib/languages/typescript'
+import json from 'highlight.js/lib/languages/json'
+import css from 'highlight.js/lib/languages/css'
+import less from 'highlight.js/lib/languages/less'
+import scss from 'highlight.js/lib/languages/scss'
+import xml from 'highlight.js/lib/languages/xml'
+import markdown from 'highlight.js/lib/languages/markdown'
 import 'highlight.js/styles/tomorrow-night-blue.css'
 import 'highlight.js/lib/common'
-import hljsVuePlugin from '@highlightjs/vue-plugin'
+
 import ElementPlus from 'element-plus'
 import * as Icons from '@element-plus/icons-vue'
 import 'element-plus/dist/index.css'
@@ -20,6 +31,15 @@ const router = createRouter({
 router.beforeEach((to) => {
   document.title = to.meta?.title || '前端笔记'
 })
+
+hljs.registerLanguage('javascript', javascript)
+hljs.registerLanguage('typescript', typescript)
+hljs.registerLanguage('json', json)
+hljs.registerLanguage('css', css)
+hljs.registerLanguage('less', less)
+hljs.registerLanguage('scss', scss)
+hljs.registerLanguage('xml', xml)
+hljs.registerLanguage('markdown', markdown)
 
 const app = createApp(App)
 

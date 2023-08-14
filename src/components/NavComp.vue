@@ -2,7 +2,7 @@
   <el-menu
     class="app-nav"
     :default-active="activeNav"
-    :default-openeds="['3']"
+    :default-openeds="['3', '4']"
   >
     <div class="avatar"></div>
     <template v-for="(item, row) in navConfig" :key="row">
@@ -48,7 +48,7 @@ const navConfig = [
     path: '/plugins'
   },
   {
-    title: '小工具',
+    title: '常用工具',
     icon: 'SetUp',
     children: [
       {
@@ -67,6 +67,12 @@ const navConfig = [
         title: '正则表达式',
         path: '/regexp'
       },
+    ]
+  },
+  {
+    title: '其他工具',
+    icon: 'FolderOpened',
+    children: [
       {
         title: 'CSS三角形生成器',
         path: '/triangle'
@@ -96,6 +102,9 @@ const handleClick = (path, index) => {
   width: 200px;
   height: 100%;
   :deep(.el-menu-item) {
+    font-size: 15px;
+  }
+  :deep(.el-sub-menu__title) {
     font-size: 15px;
   }
   .avatar {

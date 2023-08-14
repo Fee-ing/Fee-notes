@@ -121,7 +121,7 @@ onMounted(async () => {
   }
   .uploader-wrapper {
     :deep(.el-upload) {
-      border: 1px dashed var(--el-border-color);
+      border: 1px solid var(--el-border-color);
       cursor: pointer;
       position: relative;
       overflow: hidden;
