@@ -65,7 +65,7 @@ import dayjs from 'dayjs'
 import 'dayjs/locale/zh-cn'
 
 const timeForm = ref({
-  now: dayjs().format('YYYY-MM-DD HH:mm:ss dddd'),
+  now: dayjs().locale('zh-cn').format('YYYY-MM-DD HH:mm:ss dddd'),
   input: '',
   type: 'timestampH',
   format: 'YYYY-MM-DD HH:mm:ss dddd',
