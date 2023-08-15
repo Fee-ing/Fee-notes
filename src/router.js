@@ -6,6 +6,7 @@ import Qrcode from '@/pages/QrcodePage.vue'
 import Beautify from '@/pages/BeautifyPage.vue'
 import ParseQrcode from '@/pages/ParseQrcode.vue'
 import Regexp from '@/pages/RegexpPage.vue'
+import Transfer from '@/pages/TransferPage.vue'
 
 const routes = [
   {
@@ -63,6 +64,13 @@ const routes = [
     component: Regexp,
     meta: {
       title: '正则表达式'
+    }
+  },
+  {
+    path: '/transfer',
+    component: Transfer,
+    meta: {
+      title: '转换工具'
     }
   }
 ]

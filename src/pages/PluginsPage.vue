@@ -59,6 +59,16 @@ const webList = [
     description: '中国省市区插件'
   },
   {
+    title: 'DayJS',
+    link: 'https://github.com/iamkun/dayjs',
+    description: '极简的时间日期库'
+  },
+  {
+    title: 'ChromaJS',
+    link: 'https://github.com/gka/chroma.js',
+    description: '轻量的颜色转换库'
+  },
+  {
     title: 'ArtQRCode',
     link: 'https://github.com/252860883/ArtQRCode',
     description: '艺术二维码'

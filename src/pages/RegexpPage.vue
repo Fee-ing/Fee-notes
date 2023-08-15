@@ -269,6 +269,7 @@ const handleChoose = (val) => {
 
 <style lang="less" scoped>
 .page-regexp {
+  overflow-y: auto;
   .form-wrapper {
     width: 400px;
   }

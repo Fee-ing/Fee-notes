@@ -74,6 +74,10 @@ const navConfig = [
     icon: 'FolderOpened',
     children: [
       {
+        title: '转换工具',
+        path: '/transfer'
+      },
+      {
         title: 'CSS三角形生成器',
         path: '/triangle'
       },
