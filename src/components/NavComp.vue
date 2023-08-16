@@ -18,11 +18,11 @@
             v-for="(child, col) in item.children"
             :key="`${row + 1}-${col + 1}`"
             :index="`${row + 1}-${col + 1}`"
-            @click="handleClick(child.path, `${row + 1}-${col + 1}`)"
+            @click="handleClick(child, `${row + 1}-${col + 1}`)"
           >{{ child.title }}</el-menu-item>
         </el-menu-item-group>
       </el-sub-menu>
-      <el-menu-item v-else :index="`${row + 1}`" @click="handleClick(item.path, `${row + 1}`)">
+      <el-menu-item v-else :index="`${row + 1}`" @click="handleClick(item, `${row + 1}`)">
         <el-icon>
           <component :is="item.icon"></component>
         </el-icon>
@@ -84,9 +84,14 @@ const navConfig = [
       {
         title: 'PS投影转CSS3',
         path: '/shadow'
-      }
+      },
     ]
-  }
+  },
+  {
+    title: '资源导航',
+    icon: 'Film',
+    url: 'https://fee-ing.github.io/Fee-web/#/'
+  },
 ]
 
 const activeNav = ref('1')
@@ -95,9 +100,14 @@ const queryActive = computed(() => (route.query.a || '1'))
 watch(queryActive, newVal => activeNav.value = newVal)
 
 const router = useRouter()
-const handleClick = (path, index) => {
-  router.push({ path, query: { a: index } })
-  activeNav.value = index
+const handleClick = (opts, index) => {
+  const { url, path } = opts
+  if (url) {
+    window.open(url)
+  } else {
+    router.push({ path, query: { a: index } })
+    activeNav.value = index
+  }
 }
 </script>
 
