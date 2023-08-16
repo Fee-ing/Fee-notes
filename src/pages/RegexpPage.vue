@@ -6,7 +6,6 @@
           v-model="form.input"
           type="textarea"
           resize="none"
-          placeholder="请先输入正确的正则表达式"
           @input="regexpExec"
         />
       </el-form-item>
@@ -27,6 +26,9 @@
           </div>
         </div>
       </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="handleClear">清空</el-button>
+      </el-form-item>
     </el-form>
     <el-collapse class="regexp-wrapper flex-1 over-h" :model-value="['common']">
       <el-collapse-item
@@ -42,10 +44,10 @@
         >
           <div class="item-title flex-v">
             <span>{{ item.label }}：</span>
-            <el-icon class="copy-btn" title="复制" :data-clipboard-text="item.value">
+            <el-icon class="item-btn copy-btn" title="复制" :data-clipboard-text="item.value">
               <component :is="'CopyDocument'"></component>
             </el-icon>
-            <el-icon class="copy-btn" title="填入" @click="handleChoose(item.value)">
+            <el-icon class="item-btn" title="填入" @click="handleChoose(item.value)">
               <component :is="'EditPen'"></component>
             </el-icon>
           </div>
@@ -230,8 +232,8 @@ const regexp = computed(() => {
 })
 
 const regexpExec = () => {
+  if (!regexp.value) return
   const { text } = form.value
-  if (text === '' || !regexp.value) return
   let obj = {}
   if (regexp.value.global) {
     let res = null
@@ -264,6 +266,12 @@ const handleInputText = (e) => {
 const handleChoose = (val) => {
   form.value.input = val
   regexpExec()
+}
+
+const handleClear = () => {
+  form.value.input = ''
+  form.value.result = ''
+  form.value.text = ''
 }
 </script>
 
@@ -368,7 +376,7 @@ const handleChoose = (val) => {
       line-height: 1;
       padding: 5px 0;
       &:hover {
-        .copy-btn {
+        .item-btn {
           display: block;
         }
       }
@@ -380,7 +388,7 @@ const handleChoose = (val) => {
         word-break: break-all;
         word-wrap: break-word;
       }
-      .copy-btn {
+      .item-btn {
         width: auto;
         height: auto;
         padding: 5px;

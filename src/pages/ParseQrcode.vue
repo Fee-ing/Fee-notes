@@ -121,13 +121,18 @@ onMounted(async () => {
   }
   .uploader-wrapper {
     :deep(.el-upload) {
-      border: 1px solid var(--el-border-color);
       cursor: pointer;
       position: relative;
       overflow: hidden;
-      transition: var(--el-transition-duration-fast);
+      background-color: var(--el-input-bg-color,var(--el-fill-color-blank));
+      box-shadow: 0 0 0 1px var(--el-input-border-color,var(--el-border-color)) inset;
+      border-radius: var(--el-input-border-radius,var(--el-border-radius-base));
+      transition: var(--el-transition-box-shadow);
       &:hover {
-        border-color: var(--el-color-primary);
+        box-shadow: 0 0 0 1px var(--el-border-color-hover) inset;
+      }
+      &:focus {
+        box-shadow: 0 0 0 1px var(--el-color-primary) inset;
       }
     }
     .uploader-image {
