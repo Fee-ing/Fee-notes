@@ -109,10 +109,10 @@ const handleInputColor = () => {
       colorForm.value.result = `rgba(${chroma(input).rgba()})`
     } else if (format === 'hsl') {
       const hsl = chroma(input).hsl()
-      colorForm.value.result = `hsl(${hsl[0] ? `${parseFloat(hsl[0].toFixed(3))}` : hsl[0]}, ${parseInt(hsl[1] * 100)}%, ${parseInt(hsl[2] * 100)}%)`
+      colorForm.value.result = `hsl(${hsl[0] ? `${parseFloat(hsl[0].toFixed(3))}` : hsl[0]}, ${parseFloat((hsl[1] * 100).toFixed(3))}%, ${parseFloat((hsl[2] * 100).toFixed(3))}%)`
     } else if (format === 'hsla') {
       const hsl = chroma(input).hsl()
-      colorForm.value.result = `hsl(${hsl[0] ? `${parseFloat(hsl[0].toFixed(3))}` : hsl[0]}, ${parseInt(hsl[1] * 100)}%, ${parseInt(hsl[2] * 100)}%, ${hsl[3]})`
+      colorForm.value.result = `hsl(${hsl[0] ? `${parseFloat(hsl[0].toFixed(3))}` : hsl[0]}, ${parseFloat((hsl[1] * 100).toFixed(3))}%, ${parseFloat((hsl[2] * 100).toFixed(3))}%, ${hsl[3]})`
     }
   } else {
     colorForm.value.color = '#ffffff'
