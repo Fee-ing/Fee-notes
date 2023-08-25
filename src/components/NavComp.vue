@@ -38,6 +38,11 @@ import { useRouter, useRoute } from 'vue-router'
 
 const navConfig = [
   {
+    title: '影视资源',
+    icon: 'Film',
+    path: '/movie'
+  },
+  {
     title: '网站导航',
     icon: 'Link',
     path: '/'
@@ -86,11 +91,6 @@ const navConfig = [
         path: '/shadow'
       },
     ]
-  },
-  {
-    title: '资源导航',
-    icon: 'Film',
-    path: '/movie'
   },
 ]
 
