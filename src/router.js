@@ -7,6 +7,7 @@ import Beautify from '@/pages/BeautifyPage.vue'
 import ParseQrcode from '@/pages/ParseQrcode.vue'
 import Regexp from '@/pages/RegexpPage.vue'
 import Transfer from '@/pages/TransferPage.vue'
+import Movie from '@/pages/MoviePage.vue'
 
 const routes = [
   {
@@ -71,6 +72,13 @@ const routes = [
     component: Transfer,
     meta: {
       title: '转换工具'
+    }
+  },
+  {
+    path: '/movie',
+    component: Movie,
+    meta: {
+      title: '影视资源'
     }
   }
 ]

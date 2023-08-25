@@ -90,7 +90,7 @@ const navConfig = [
   {
     title: '资源导航',
     icon: 'Film',
-    url: 'https://fee-ing.github.io/Fee-web/#/'
+    path: '/movie'
   },
 ]
 
