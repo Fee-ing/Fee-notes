@@ -2,6 +2,7 @@
   <div class="page-wrapper page-movie" id="page-movie">
     <iframe
       class="movie-iframe"
+      :class="[loaded ? 'show' : '']"
       id="movie-iframe"
       src="https://fee-ing.github.io/Fee-web/#/"
       frameborder="0"
@@ -10,10 +11,13 @@
 </template>
 
 <script setup>
-import { onActivated } from 'vue'
+import { onActivated, ref } from 'vue'
 import { ElLoading } from 'element-plus'
 
+const loaded = ref(false)
+
 onActivated(() => {
+  loaded.value = false
   const loading = ElLoading.service({
     lock: true,
     text: '加载中~',
@@ -21,6 +25,7 @@ onActivated(() => {
     target: document.getElementById('page-movie')
   })
   document.getElementById('movie-iframe').onload = () => {
+    loaded.value = true
     loading.close()
   }
 })
@@ -32,6 +37,10 @@ onActivated(() => {
   .movie-iframe {
     height: 100%;
     width: 100%;
+    opacity: 0;
+    &.show {
+      opacity: 1;
+    }
   }
 }
 </style>
