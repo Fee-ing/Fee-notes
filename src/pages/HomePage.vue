@@ -54,6 +54,11 @@ const webList = [
     description: '炫酷的UI组件'
   },
   {
+    title: 'Tailspark',
+    link: 'https://tailspark.co/',
+    description: '300+免费的CSS组件和模板'
+  },
+  {
     title: 'Loading',
     link: 'https://loading.io/',
     description: '炫酷丰富的loading图标'
