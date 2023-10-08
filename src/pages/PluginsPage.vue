@@ -44,6 +44,11 @@ const webList = [
     description: '生成二维码'
   },
   {
+    title: 'QRCodeStyling',
+    link: 'https://github.com/kozakdenys/qr-code-styling',
+    description: '风格化二维码'
+  },
+  {
     title: 'JsBarcode',
     link: 'https://github.com/lindell/JsBarcode',
     description: '生成条形码'
