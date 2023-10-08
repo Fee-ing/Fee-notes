@@ -98,6 +98,11 @@ const webList = [
     link: 'https://github.com/jooy2/vutron',
     description: '基于Vue3、用于开发Electron跨平台桌面应用的预配置模板'
   },
+  {
+    title: 'FullPageJS',
+    link: 'https://github.com/alvarotrigo/fullPage.js',
+    description: '用于创建全屏滚动网站，并且可以在网站的各个部分内添加横向滑块'
+  },
 ]
 </script>
 
