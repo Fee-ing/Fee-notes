@@ -8,6 +8,7 @@ import ParseQrcode from '@/pages/ParseQrcode.vue'
 import Regexp from '@/pages/RegexpPage.vue'
 import Transfer from '@/pages/TransferPage.vue'
 import Movie from '@/pages/MoviePage.vue'
+import Stitch from '@/pages/StitchPage.vue'
 
 const routes = [
   {
@@ -79,6 +80,13 @@ const routes = [
     component: Movie,
     meta: {
       title: '影视资源'
+    }
+  },
+  {
+    path: '/stitch',
+    component: Stitch,
+    meta: {
+      title: '拼接图片'
     }
   }
 ]

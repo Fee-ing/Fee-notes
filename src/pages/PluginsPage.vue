@@ -29,9 +29,34 @@ const webList = [
     description: '复制内容到剪贴板的插件'
   },
   {
+    title: 'js-cookie',
+    link: 'https://github.com/js-cookie/js-cookie',
+    description: '用于处理 Cookie 的简单、轻量级的 JavaScript API'
+  },
+  {
     title: 'Html2canvas',
     link: 'https://github.com/niklasvh/html2canvas',
     description: '屏幕截图插件'
+  },
+  {
+    title: 'dom-to-image',
+    link: 'https://github.com/tsayen/dom-to-image',
+    description: '将任意 DOM 节点转换为用 JavaScript 编写的矢量 （SVG） 或光栅（PNG 或 JPEG）图像'
+  },
+  {
+    title: 'SortableJS',
+    link: 'https://github.com/SortableJS/Sortable',
+    description: '可重新排序的拖放列表的 JavaScript 库'
+  },
+  {
+    title: 'Vue.Draggable',
+    link: 'https://github.com/SortableJS/Vue.Draggable',
+    description: '基于Sortable.js实现的vue拖拽插件'
+  },
+  {
+    title: 'MoveableJS',
+    link: 'https://github.com/daybrush/moveable',
+    description: '可拖动的、可调整大小的、可缩放的、可旋转的、可弯曲的、可收缩的、可分组的、可对齐的一个插件'
   },
   {
     title: 'Painter',
@@ -47,6 +72,11 @@ const webList = [
     title: 'QRCodeStyling',
     link: 'https://github.com/kozakdenys/qr-code-styling',
     description: '风格化二维码'
+  },
+  {
+    title: 'ArtQRCode',
+    link: 'https://github.com/252860883/ArtQRCode',
+    description: '艺术二维码'
   },
   {
     title: 'JsBarcode',
@@ -74,9 +104,19 @@ const webList = [
     description: '轻量的颜色转换库'
   },
   {
-    title: 'ArtQRCode',
-    link: 'https://github.com/252860883/ArtQRCode',
-    description: '艺术二维码'
+    title: 'Heic2anyJS',
+    link: 'https://github.com/alexcorvi/heic2any',
+    description: '将 HEIC/HEIF 图像文件转换为 JPEG、PNG 或 GIF'
+  },
+  {
+    title: 'TrackingJS',
+    link: 'https://github.com/eduardolundgren/tracking.js',
+    description: '人脸识别和图像识别'
+  },
+  {
+    title: 'UuidJS',
+    link: 'https://github.com/uuidjs/uuid',
+    description: '生成随机的UUID'
   },
   {
     title: 'Console-ban',

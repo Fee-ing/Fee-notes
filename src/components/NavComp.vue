@@ -78,6 +78,10 @@ const navConfig = [
         path: '/transfer'
       },
       {
+        title: '图片拼接',
+        path: '/stitch'
+      },
+      {
         title: 'CSS三角形生成器',
         path: '/triangle'
       },
