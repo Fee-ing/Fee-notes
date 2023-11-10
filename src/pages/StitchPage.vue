@@ -146,14 +146,15 @@ const handleDownload = () => {
   overflow: auto !important;
   padding: 0 !important;
   .stitch-delete {
-    position: absolute;
-    width: 100%;
+    position: fixed;
+    width: calc(100% - 200px);
     height: 70px;
-    left: 0;
+    left: 200px;
     top: 0;
     overflow: hidden;
     &.delete {
-      transition: all 0.15s;
+      z-index: 20;
+      transition: background-color 0.15s;
       background-color: var(--el-color-danger-light-9);
       span {
         position: absolute;
@@ -190,12 +191,12 @@ const handleDownload = () => {
   }
   .stitch-content {
     display: flex;
-    min-width: calc(100% - 100px);
-    min-height: calc(100% - 140px);
-    margin: 70px 50px;
+    min-width: calc(100% - 40px);
+    min-height: calc(100% - 90px);
+    margin: 70px 20px 20px;
     overflow: hidden;
     &.horizontal {
-      height: calc(100% - 140px);
+      height: calc(100% - 90px);
       align-items: center;
       .stitch-images {
         height: 100%;
@@ -213,7 +214,7 @@ const handleDownload = () => {
       }
     }
     &.vertical {
-      width: calc(100% - 100px);
+      width: calc(100% - 40px);
       justify-content: center;
       .stitch-images {
         width: 50%;
