@@ -6,8 +6,8 @@
         class="stitch-radio"
         style="--el-switch-off-color: #ff4949"
         size="large"
-        :active-action-icon="Switch"
-        :inactive-action-icon="Sort"
+        :active-action-icon="Right"
+        :inactive-action-icon="Bottom"
         active-value="1"
         inactive-value="2"
       />
@@ -26,6 +26,9 @@
         <el-icon class="stitch-icon add"><UploadFilled /></el-icon>
       </el-tooltip>
     </el-upload>
+    <el-tooltip content="清空" placement="bottom">
+      <el-icon class="stitch-icon delete" @click.stop="handleDelete"><Refresh /></el-icon>
+    </el-tooltip>
     <el-tooltip content="下载" placement="bottom">
       <el-icon class="stitch-icon download" @click.stop="handleDownload"><Download /></el-icon>
     </el-tooltip>
@@ -41,22 +44,22 @@
       class="stitch-content"
       :class="[direction === '1' ? 'horizontal' : 'vertical', images.length === 0 ? 'center' : '']"
     >
-      <div class="stitch-images" id="stitch-images">
-        <VueDraggableNext
-          class="stitch-draggable"
-          v-model="images"
-          draggable=".image"
-          v-bind="{ group: 'delete' }"
-          @start="drag = true"
-          @end="handleDragEnd"
-        >
-          <div class="image" v-for="(item, index) in images" :key="index">
-            <img :src="item" alt="">
-          </div>
-        </VueDraggableNext>
-      </div>
+      <VueDraggableNext
+        v-if="images.length > 0"
+        class="stitch-draggable"
+        id="stitch-canvas"
+        v-model="images"
+        draggable=".image"
+        v-bind="{ group: 'delete' }"
+        @start="drag = true"
+        @end="handleDragEnd"
+      >
+        <div class="image" v-for="(item, index) in images" :key="index">
+          <img :src="item" alt="">
+        </div>
+      </VueDraggableNext>
       <el-upload
-        v-if="images.length === 0"
+        v-else
         ref="uploadCenter"
         action=""
         multiple
@@ -75,7 +78,7 @@
 <script setup>
 import { ref } from 'vue'
 import { ElLoading, ElNotification } from 'element-plus'
-import { Switch, Sort } from '@element-plus/icons-vue'
+import { Right, Bottom } from '@element-plus/icons-vue'
 import { VueDraggableNext } from 'vue-draggable-next'
 import domtoimage from '../utils/dom-to-image'
 
@@ -96,6 +99,11 @@ const handleDragEnd = () => {
   }, 150)
 }
 
+const handleDelete = () => {
+  images.value = []
+  deletes.value = []
+}
+
 const handleUpload = (file) => {
   const url = URL.createObjectURL(file.raw)
   images.value.push(url)
@@ -114,13 +122,21 @@ const downloadFile = (href, fileName = '图片') => {
 }
 
 const handleDownload = () => {
+  if (images.value.length === 0) {
+    ElNotification({
+      title: '提示',
+      message: '请先上传图片',
+      type: 'error',
+    })
+    return
+  }
   const loadingInstance = ElLoading.service({
     fullscreen: true,
     lock: true,
     target: document.getElementById('page-stitch'),
     text: '生成中...'
   })
-  domtoimage.toPng(document.getElementById('stitch-images'), { scale: 2 })
+  domtoimage.toPng(document.getElementById('stitch-canvas'), { scale: 2 })
     .then(function (url) {
       downloadFile(url)
       setTimeout(() => {
@@ -143,7 +159,6 @@ const handleDownload = () => {
 <style lang="less" scoped>
 .page-stitch {
   position: relative;
-  overflow: auto !important;
   padding: 0 !important;
   .stitch-delete {
     position: fixed;
@@ -186,48 +201,54 @@ const handleDownload = () => {
     font-size: 28px;
     cursor: pointer;
     &.add {
+      right: 130px;
+    }
+    &.delete {
       right: 80px;
     }
   }
   .stitch-content {
     display: flex;
-    min-width: calc(100% - 40px);
-    min-height: calc(100% - 90px);
-    margin: 70px 20px 20px;
+    height: calc(100% - 70px);
+    margin-top: 70px;
     overflow: hidden;
     &.horizontal {
-      height: calc(100% - 90px);
       align-items: center;
-      .stitch-images {
+      overflow-x: auto;
+      overflow-y: hidden;
+      .stitch-draggable {
+        height: 60%;
+        white-space: nowrap;
+      }
+      .image {
+        display: inline-block;
         height: 100%;
-        .stitch-draggable {
+        img {
           height: 100%;
-        }
-        .image {
-          display: inline-block;
-          height: 100%;
-          img {
-            height: 100%;
-            width: auto;
-          }
+          width: auto;
         }
       }
     }
     &.vertical {
-      width: calc(100% - 40px);
+      width: 100%;
       justify-content: center;
+      overflow-x: hidden;
+      overflow-y: auto;
+      .stitch-draggable {
+        width: 50%;
+      }
+      img {
+        display: block;
+        width: 100%;
+      }
       .stitch-images {
         width: 50%;
-        .stitch-draggable {
-          width: 100%;
-        }
-        img {
-          display: block;
-          width: 100%;
-        }
+        overflow: hidden;
+        
       }
     }
     &.center {
+      overflow: hidden;
       align-items: center;
       justify-content: center;
       :deep(.el-upload) {
@@ -239,25 +260,22 @@ const handleDownload = () => {
       }
     }
   }
-  .stitch-images {
+  .image {
+    position: relative;
     overflow: hidden;
-    .image {
-      position: relative;
-      overflow: hidden;
-      cursor: pointer;
+    cursor: pointer;
+    &::after {
+      transition: background-color 0.15s;
+    }
+    &:hover {
       &::after {
-        transition: background-color 0.15s;
-      }
-      &:hover {
-        &::after {
-          content: '';
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          left: 0;
-          top: 0;
-          background-color: rgba(255, 255, 255, 0.15);
-        }
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        background-color: rgba(255, 255, 255, 0.15);
       }
     }
   }
