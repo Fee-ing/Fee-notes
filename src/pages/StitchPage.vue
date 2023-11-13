@@ -241,11 +241,6 @@ const handleDownload = () => {
         display: block;
         width: 100%;
       }
-      .stitch-images {
-        width: 50%;
-        overflow: hidden;
-        
-      }
     }
     &.center {
       overflow: hidden;
