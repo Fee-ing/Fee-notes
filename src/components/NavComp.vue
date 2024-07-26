@@ -67,6 +67,10 @@ const navConfig = [
         title: '正则表达式',
         path: '/regexp'
       },
+      {
+        title: 'm3u8视频下载',
+        path: '/m3u8'
+      },
     ]
   },
   {

@@ -9,6 +9,7 @@ import Regexp from '@/pages/RegexpPage.vue'
 import Transfer from '@/pages/TransferPage.vue'
 import Movie from '@/pages/MoviePage.vue'
 import Stitch from '@/pages/StitchPage.vue'
+import M3u8 from '@/pages/M3u8Page.vue'
 
 const routes = [
   {
@@ -87,6 +88,13 @@ const routes = [
     component: Stitch,
     meta: {
       title: '拼接图片'
+    }
+  },
+  {
+    path: '/m3u8',
+    component: M3u8,
+    meta: {
+      title: 'm3u8视频下载'
     }
   }
 ]
