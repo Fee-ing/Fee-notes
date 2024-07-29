@@ -21,6 +21,7 @@
       :stroke-width="20"
       :percentage="percentage"
       style="max-width: 600px;margin-top: 50px;"
+      v-if="downloadIndex > 0"
     />
     <el-timeline style="max-width: 600px;margin-top: 50px;">
       <el-timeline-item
@@ -172,6 +173,7 @@ const downloadTS = () => {
     const index = downloadIndex.value
     if (index >= endSegment.value) return
     downloadIndex.value++
+    console.log(downloadIndex.value)
     // log.value.unshift({
     //   content: `下载第${downloadIndex.value}个视频片段`,
     //   timestamp: dayjs(new Date()).format('YYYY-MM-DD hh:mm:ss:SSS')

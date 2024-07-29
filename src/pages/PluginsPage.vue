@@ -99,6 +99,11 @@ const webList = [
     description: '极简的时间日期库'
   },
   {
+    title: 'DexieJS',
+    link: 'https://github.com/dexie/Dexie.js',
+    description: 'IndexedDB的简约包装器'
+  },
+  {
     title: 'ChromaJS',
     link: 'https://github.com/gka/chroma.js',
     description: '轻量的颜色转换库'
