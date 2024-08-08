@@ -1,40 +1,44 @@
 <template>
-  <div class="page-wrapper page-m3u8">
-    <el-input
-      v-model="url"
-      style="max-width: 600px"
-      placeholder="请输入.m3u8格式的链接"
-      class="input-with-select"
-    >
-      <template #prepend>
-        <el-select v-model="model" placeholder="请选择" style="width: 115px">
-          <el-option label="原格式" value="1" />
-          <el-option label="MP4" value="2" />
-        </el-select>
-      </template>
-      <template #append>
-        <el-button type="primary" @click="handleStart" :loading="downloadLoading">下载</el-button>
-      </template>
-    </el-input>
-    <el-progress
-      :text-inside="true"
-      :stroke-width="20"
-      :percentage="percentage"
-      style="max-width: 600px;margin-top: 50px;"
-      v-if="downloadIndex > 0"
-    />
-    <el-timeline style="max-width: 600px;margin-top: 50px;">
-      <el-timeline-item
-        v-for="(item, index) in log"
-        :key="index"
-        :timestamp="item.timestamp"
-        :hollow="index === 0"
-        :type="index === 0 ? 'primary' : ''"
-        :color="item.color"
+  <div class="page-wrapper page-m3u8 flex-h">
+    <div class="m3u8-content">
+      <el-input
+        v-model="url"
+        clearable
+        style="max-width: 600px"
+        placeholder="请输入.m3u8格式的链接"
+        class="input-with-select"
+        @clear="handleClear"
       >
-        {{ item.content }}
-      </el-timeline-item>
-    </el-timeline>
+        <template #prepend>
+          <el-select v-model="model" placeholder="请选择" style="width: 115px">
+            <el-option label="原格式" value="1" />
+            <el-option label="MP4" value="2" />
+          </el-select>
+        </template>
+        <template #append>
+          <el-button type="primary" @click="handleStart" :loading="downloadLoading">下载</el-button>
+        </template>
+      </el-input>
+      <el-progress
+        :text-inside="true"
+        :stroke-width="20"
+        :percentage="percentage"
+        style="max-width: 600px;margin-top: 50px;"
+        v-if="downloadIndex > 0"
+      />
+      <el-timeline style="max-width: 600px;margin-top: 50px;">
+        <el-timeline-item
+          v-for="(item, index) in log"
+          :key="index"
+          :timestamp="item.timestamp"
+          :hollow="index === 0"
+          :type="index === 0 ? 'primary' : ''"
+          :color="item.color"
+        >
+          {{ item.content }}
+        </el-timeline-item>
+      </el-timeline>
+    </div>
   </div>
 </template>
 
@@ -173,7 +177,6 @@ const downloadTS = () => {
     const index = downloadIndex.value
     if (index >= endSegment.value) return
     downloadIndex.value++
-    console.log(downloadIndex.value)
     // log.value.unshift({
     //   content: `下载第${downloadIndex.value}个视频片段`,
     //   timestamp: dayjs(new Date()).format('YYYY-MM-DD hh:mm:ss:SSS')
@@ -350,10 +353,17 @@ const handleStart = () => {
   getM3U8(url.value)
 }
 
+const handleClear = () => {
+  downloadIndex.value = 0
+}
+
 </script>
 
 <style lang="less" scoped>
 .page-m3u8 {
-  
+  .m3u8-content {
+    width: 600px;
+    padding-top: 300px;
+  }
 }
 </style>
