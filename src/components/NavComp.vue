@@ -95,11 +95,11 @@ const navConfig = [
       },
     ]
   },
-  {
-    title: '影视资源',
-    icon: 'Film',
-    path: '/movie'
-  },
+  // {
+  //   title: '影视资源',
+  //   icon: 'Film',
+  //   path: '/movie'
+  // },
 ]
 
 const activeNav = ref('1')

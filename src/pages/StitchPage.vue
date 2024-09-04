@@ -79,7 +79,6 @@
 <script setup>
 import { ref } from 'vue'
 import { ElLoading, ElNotification } from 'element-plus'
-import { Right, Bottom } from '@element-plus/icons-vue'
 import { VueDraggableNext } from 'vue-draggable-next'
 import domtoimage from '../utils/dom-to-image'
 
