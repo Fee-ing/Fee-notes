@@ -47,15 +47,16 @@
       <VueDraggableNext
         v-if="images.length > 0"
         class="stitch-draggable"
-        id="stitch-canvas"
         v-model="images"
         draggable=".image"
         v-bind="{ group: 'delete' }"
         @start="drag = true"
         @end="handleDragEnd"
       >
-        <div class="image" v-for="(item, index) in images" :key="index">
-          <img :src="item" alt="">
+        <div id="stitch-canvas">
+          <div class="image" v-for="(item, index) in images" :key="index">
+            <img :src="item" alt="">
+          </div>
         </div>
       </VueDraggableNext>
       <el-upload

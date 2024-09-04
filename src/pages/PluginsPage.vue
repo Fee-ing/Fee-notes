@@ -148,6 +148,11 @@ const webList = [
     link: 'https://github.com/alvarotrigo/fullPage.js',
     description: '用于创建全屏滚动网站，并且可以在网站的各个部分内添加横向滑块'
   },
+  {
+    title: 'TypedJS',
+    link: 'https://github.com/mattboldt/typed.js',
+    description: '专门用于创建打字动画效果的 JavaScript 库'
+  },
 ]
 </script>
 
