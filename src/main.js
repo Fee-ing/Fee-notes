@@ -11,7 +11,7 @@ import less from 'highlight.js/lib/languages/less'
 import scss from 'highlight.js/lib/languages/scss'
 import xml from 'highlight.js/lib/languages/xml'
 import markdown from 'highlight.js/lib/languages/markdown'
-import 'highlight.js/styles/tomorrow-night-blue.css'
+import 'highlight.js/styles/a11y-light.css'
 import 'highlight.js/lib/common'
 
 import ElementPlus from 'element-plus'

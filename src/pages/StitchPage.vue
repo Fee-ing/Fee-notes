@@ -17,7 +17,7 @@
       action=""
       multiple
       accept="image/png,image/jpeg,image/webp"
-      style="position: absolute;"
+      style="position: absolute;right: 00px;"
       :show-file-list="false"
       :auto-upload="false"
       :on-change="handleUpload"
@@ -160,11 +160,12 @@ const handleDownload = () => {
 .page-stitch {
   position: relative;
   padding: 0 !important;
+  overflow: hidden;
   .stitch-delete {
-    position: fixed;
-    width: calc(100% - 200px);
+    position: absolute;
+    width: 100%;
     height: 70px;
-    left: 200px;
+    left: 0;
     top: 0;
     overflow: hidden;
     &.delete {
@@ -187,13 +188,13 @@ const handleDownload = () => {
     }
   }
   .stitch-radio {
-    position: fixed;
-    left: 220px;
+    position: absolute;
+    left: 20px;
     top: 10px;
     z-index: 10;
   }
   .stitch-icon {
-    position: fixed;
+    position: absolute;
     right: 30px;
     top: 20px;
     z-index: 10;

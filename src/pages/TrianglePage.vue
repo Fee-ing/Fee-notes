@@ -134,6 +134,9 @@
           />
         </div>
       </el-form-item>
+      <el-form-item>
+        <el-button class="copy-btn" type="primary" :data-clipboard-text="triangleCode">复制</el-button>
+      </el-form-item>
     </el-form>
     <div class="page-right">
       <div class="show-wrapper">
@@ -151,15 +154,6 @@
         >
           <el-icon class="refresh-btn btn" @click="handleResetData">
             <component :is="'Refresh'"></component>
-          </el-icon>
-        </el-tooltip>
-        <el-tooltip
-          effect="light"
-          content="复制代码"
-          placement="top-end"
-        >
-          <el-icon class="copy-btn btn" :data-clipboard-text="triangleCode">
-            <component :is="'CopyDocument'"></component>
           </el-icon>
         </el-tooltip>
       </div>

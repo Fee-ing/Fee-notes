@@ -151,27 +151,13 @@
           autodetect
           :code="shadowCode"
         ></highlightjs>
-        <el-tooltip
-          effect="light"
-          content="重置数据"
-          placement="top-end"
-        >
-          <el-icon class="refresh-btn btn" @click="handleResetData">
-            <component :is="'Refresh'"></component>
-          </el-icon>
-        </el-tooltip>
-        <el-tooltip
-          effect="light"
-          content="复制代码"
-          placement="top-end"
-        >
-          <el-icon class="copy-btn btn" :data-clipboard-text="shadowCode">
-            <component :is="'CopyDocument'"></component>
-          </el-icon>
-        </el-tooltip>
       </div>
-      <div class="show-wrapper flex-vh">
+      <div class="show-wrapper flex-col-vh">
         <div class="show-box flex-vh" :style="shadowStyle">字</div>
+        <div>
+          <el-button class="copy-btn" type="primary" :data-clipboard-text="shadowCode">复制</el-button>
+          <el-button type="primary" text bg @click="handleResetData">重置</el-button>
+        </div>
       </div>
     </div>
   </div>
@@ -256,6 +242,9 @@ const handleResetData = () => {
     &:not(:first-child) {
       margin-left: 20px;
     }
+    :deep(.el-card__header) {
+      border-bottom: none;
+    }
     .card-header {
       font-size: 15px;
       font-weight: 600;
@@ -297,11 +286,11 @@ const handleResetData = () => {
   .show-wrapper {
     width: 310px;
     overflow: hidden;
-    padding-bottom: 10px;
     .show-box {
       width: 100px;
       height: 100px;
       font-size: 20px;
+      margin-bottom: 30px;
     }
   }
   :deep(.hljs) {

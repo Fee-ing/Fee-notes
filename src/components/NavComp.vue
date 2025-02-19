@@ -1,35 +1,37 @@
 <template>
-  <el-menu
-    class="app-nav"
-    :default-active="activeNav"
-    :default-openeds="['3', '4']"
-  >
+  <div class="app-nav flex-col">
     <div class="avatar"></div>
-    <template v-for="(item, row) in navConfig" :key="row">
-      <el-sub-menu v-if="item.children" :index="`${row + 1}`">
-        <template #title>
+    <el-menu
+      class="nav-wrapper flex-1"
+      :default-active="activeNav"
+      :default-openeds="['3', '4']"
+    >
+      <template v-for="(item, row) in navConfig" :key="row">
+        <el-sub-menu v-if="item.children" :index="`${row + 1}`">
+          <template #title>
+            <el-icon>
+              <component :is="item.icon"></component>
+            </el-icon>
+            <span>{{ item.title }}</span>
+          </template>
+          <el-menu-item-group>
+            <el-menu-item
+              v-for="(child, col) in item.children"
+              :key="`${row + 1}-${col + 1}`"
+              :index="`${row + 1}-${col + 1}`"
+              @click="handleClick(child, `${row + 1}-${col + 1}`)"
+            >{{ child.title }}</el-menu-item>
+          </el-menu-item-group>
+        </el-sub-menu>
+        <el-menu-item v-else :index="`${row + 1}`" @click="handleClick(item, `${row + 1}`)">
           <el-icon>
             <component :is="item.icon"></component>
           </el-icon>
           <span>{{ item.title }}</span>
-        </template>
-        <el-menu-item-group>
-          <el-menu-item
-            v-for="(child, col) in item.children"
-            :key="`${row + 1}-${col + 1}`"
-            :index="`${row + 1}-${col + 1}`"
-            @click="handleClick(child, `${row + 1}-${col + 1}`)"
-          >{{ child.title }}</el-menu-item>
-        </el-menu-item-group>
-      </el-sub-menu>
-      <el-menu-item v-else :index="`${row + 1}`" @click="handleClick(item, `${row + 1}`)">
-        <el-icon>
-          <component :is="item.icon"></component>
-        </el-icon>
-        <span>{{ item.title }}</span>
-      </el-menu-item>
-    </template>
-  </el-menu>
+        </el-menu-item>
+      </template>
+    </el-menu>
+  </div>
 </template>
 
 <script setup>
@@ -78,13 +80,13 @@ const navConfig = [
     icon: 'FolderOpened',
     children: [
       {
-        title: '转换工具',
+        title: '时间、颜色转换',
         path: '/transfer'
       },
-      {
-        title: '图片拼接',
-        path: '/stitch'
-      },
+      // {
+      //   title: '图片拼接',
+      //   path: '/stitch'
+      // },
       {
         title: 'CSS三角形生成器',
         path: '/triangle'
@@ -123,21 +125,30 @@ const handleClick = (opts, index) => {
 .app-nav {
   width: 200px;
   height: 100%;
-  :deep(.el-menu-item) {
-    font-size: 15px;
-  }
-  :deep(.el-sub-menu__title) {
-    font-size: 15px;
-  }
+  margin-right: 20px;
+  overflow: hidden;
+  user-select: none;
   .avatar {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    margin: 30px auto 20px;
+    width: 120px;
+    height: 120px;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    background-image: url(../assets/avatar.jpg);
+    background-image: url(../assets/avatar.png);
+    background-color: transparent;
+    margin: 0 auto;
+  }
+  .nav-wrapper {
+    border-radius: 14px;
+    box-shadow: rgba(0, 0, 0, 0.04) 0px 12px 32px 4px;
+    border-right: none !important;
+    margin-top: 20px;
+    :deep(.el-menu-item) {
+      font-size: 15px;
+    }
+    :deep(.el-sub-menu__title) {
+      font-size: 15px;
+    }
   }
 }
 </style>

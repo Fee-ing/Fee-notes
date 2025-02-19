@@ -21,12 +21,21 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { ElNotification } from 'element-plus'
 
 const url = ref('')
 const downloadLoading = ref(false)
 const downloadProgress = ref(0)
+const documentTitle = document.title
+
+watch(downloadLoading, (newValue) => {
+  if (newValue) {
+    document.title = `${documentTitle} - 进度${downloadProgress.value}%`
+  } else {
+    document.title = documentTitle
+  }
+})
 
 const handleStart = () => {
   if (downloadLoading.value) {
@@ -95,8 +104,9 @@ const handleStart = () => {
       // 创建 MediaRecorder
       const stream = video.captureStream()
       const mediaRecorder = new MediaRecorder(stream, {
-        mimeType: 'video/webm',
-        videoBitsPerSecond: 1000000 // 设置比特率为 1 Mbps
+        mimeType: 'video/mp4', // 使用 video/mp4 以提高质量
+        videoBitsPerSecond: 5000000, // 设置比特率为 5 Mbps
+        audioBitsPerSecond: 192000   // 设置音频比特率为 192 kbps
       })
 
       const chunks = []
@@ -108,13 +118,13 @@ const handleStart = () => {
 
       mediaRecorder.onstop = () => {
         // 合并录制的数据
-        const blob = new Blob(chunks, { type: 'video/webm' })
+        const blob = new Blob(chunks, { type: 'video/mp4' })
         const url = URL.createObjectURL(blob)
 
         // 提供下载链接
         const a = document.createElement('a')
         a.href = url
-        a.download = 'video.webm'
+        a.download = 'video.mp4'
         a.click()
         URL.revokeObjectURL(url)
 
@@ -134,6 +144,9 @@ const handleStart = () => {
         }
         const overallProgress = (loadProgress + recordProgress) / 2; // 综合加载和录制进度
         downloadProgress.value = overallProgress.toFixed(2)
+        if (downloadLoading.value) {
+          document.title = `${documentTitle} - 进度${downloadProgress.value}%`
+        }
       }
 
       // 监听加载和录制进度

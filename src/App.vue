@@ -1,5 +1,5 @@
 <template>
-  <div class="app-wrapper flex over-h">
+  <div class="app-wrapper flex">
     <Nav></Nav>
     <router-view class="flex-1 over-h" v-slot="{ Component }">
       <keep-alive>

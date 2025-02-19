@@ -23,7 +23,7 @@
 html, body {
   position: relative;
   height: 100%;
-  overflow: auto;
+  overflow: hidden;
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -36,10 +36,15 @@ html, body {
   min-height: 700px;
   position: relative;
   overflow: hidden;
+  background-color: #f3f5f9;
+  padding: 20px;
 }
 .page-wrapper {
   padding: 20px;
   overflow: auto;
+  background-color: #fff;
+  border-radius: 14px;
+  box-shadow: rgba(0, 0, 0, 0.04) 0px 12px 32px 4px;
 }
 .page-card {
   width: calc(25% - 20px);
@@ -48,6 +53,9 @@ html, body {
   .card-header {
     font-weight: 600;
     font-size: 15px;
+  }
+  .el-card__header {
+    border-bottom: none;
   }
 }
 .page-code {

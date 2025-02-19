@@ -10,9 +10,9 @@
     <el-form class="form-wrapper" label-position="top" :model="form.options">
       <el-form-item>
         <el-button type="primary" :loading="loading" @click="handleStart">美化</el-button>
-        <el-button class="copy-btn" type="success" text bg :data-clipboard-text="form.beautify">复制</el-button>
-        <el-button type="warning" text bg @click="handleClear">清空</el-button>
-        <el-button type="danger" text bg @click="handleReset">重置</el-button>
+        <el-button class="copy-btn" type="primary" text bg :data-clipboard-text="form.beautify">复制</el-button>
+        <el-button type="primary" text bg @click="handleClear">清空</el-button>
+        <el-button type="primary" text bg @click="handleReset">重置</el-button>
       </el-form-item>
       <el-form-item label="代码类型：">
         <el-select v-model="form.options.parser">
@@ -216,16 +216,19 @@ const handleReset = () => {
     }
   }
   .code-input {
-    background-color: rgba(64, 158, 255, .1);
+    background-color: #fff;
+    border-right: 1px solid rgb(228, 231, 237);
     :deep(.el-textarea__inner) {
       height: 100%;
       border: none;
       box-shadow: none;
       background-color: transparent;
+      padding: 20px;
     }
   }
   .code-wrapper {
     margin-right: 20px;
+    border-right: 1px solid rgb(228, 231, 237);
     :deep(pre) {
       height: 100%;
     }
