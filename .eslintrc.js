@@ -1,5 +1,6 @@
 module.exports = {
   global: {
-    Hls: true
+    Hls: true,
+    FFmpeg: true
   }
 }
