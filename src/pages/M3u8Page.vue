@@ -15,7 +15,14 @@
           <div class="flex-1">
             <span v-if="downloadLoading">下载进度：{{downloadProgress}}%</span>
           </div>
-          <el-button type="primary" plain :icon="downloadLoading ? null : Position" :loading="downloadLoading" circle @click="handleStart"></el-button>
+          <el-button
+            type="primary"
+            plain
+            circle
+            :icon="downloadLoading ? null : Position"
+            
+            @click="handleStart"
+          ></el-button>
         </div>
       </div>
     </div>
@@ -106,14 +113,14 @@ const handleStart = async () => {
     downloadLoading.value = false
     return
   } else if (videoM3u8Url && audioM3u8Url) {
-    if (typeof SharedArrayBuffer === 'undefined') {
-      console.error('SharedArrayBuffer is not supported in this environment.')
-      ElNotification.error({
-        title: 'Error',
-        message: 'SharedArrayBuffer is not supported in this environment'
-      })
-      return
-    }
+    // if (typeof SharedArrayBuffer === 'undefined') {
+    //   console.error('SharedArrayBuffer is not supported in this environment.')
+    //   ElNotification.error({
+    //     title: 'Error',
+    //     message: 'SharedArrayBuffer is not supported in this environment'
+    //   })
+    //   return
+    // }
     downloadType.value = 'merge'
     downloadProgress.value = 0
     downloadVideoByHls(videoM3u8Url)
@@ -451,7 +458,10 @@ const updateProgress = (loadProgress, currentTime, duration, type) => {
 // 合并视频和音频文件
 const mergeFiles = async () => {
   console.log('Merging files...')
-  const ffmpeg = createFFmpeg({ log: true })
+  const ffmpeg = createFFmpeg({
+    log: true,
+    corePath: 'https://unpkg.com/@ffmpeg/core@0.10.0/dist/ffmpeg-core.js', // 单线程版本
+  })
   await ffmpeg.load()
 
   const audioBlob = new Blob(audioChunks, { type: 'audio/webm' })
