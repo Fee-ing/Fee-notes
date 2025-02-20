@@ -61,6 +61,12 @@ const handleStart = async () => {
     })
     return
   }
+  videoElement = null
+  videoRecorder = null
+  videoChunks = []
+  audioElement = null
+  audioRecorder = null
+  audioChunks = []
   let videoM3u8Url = '', audioM3u8Url = ''
   for (let index = 0; index < m3u8UrlList.length; index++) {
     if (videoM3u8Url && audioM3u8Url) break
@@ -179,7 +185,7 @@ const checkMediaTracks = async (m3u8Url) => {
 
 const downloadVideoByHls = (videoM3u8Url) => {
   videoElement = document.createElement('video')
-  // videoElement.muted = true
+  videoElement.volume = 0.001
   const hlsVideo = new Hls()
 
   // 加载视频 .m3u8 文件
@@ -432,7 +438,7 @@ const mergeFiles = async () => {
   }
 
   console.log('Merging files...')
-  const ffmpeg = createFFmpeg({ log: false })
+  const ffmpeg = createFFmpeg({ log: true })
   await ffmpeg.load()
 
   const audioBlob = new Blob(audioChunks, { type: 'audio/webm' })
@@ -454,7 +460,7 @@ const downloadMp4 = (chunks) => {
   // 提供下载链接
   const a = document.createElement('a')
   a.href = url
-  a.download = 'video.mp4'
+  a.download = 'm3u8-video.mp4'
   a.click()
   URL.revokeObjectURL(url)
 

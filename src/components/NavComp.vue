@@ -69,16 +69,16 @@ const navConfig = [
         title: '正则表达式',
         path: '/regexp'
       },
-      {
-        title: 'm3u8视频下载',
-        path: '/m3u8'
-      },
     ]
   },
   {
     title: '其他工具',
     icon: 'FolderOpened',
     children: [
+      {
+        title: 'm3u8视频下载',
+        path: '/m3u8'
+      },
       {
         title: '时间、颜色转换',
         path: '/transfer'
