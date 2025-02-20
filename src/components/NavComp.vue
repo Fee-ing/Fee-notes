@@ -1,11 +1,11 @@
 <template>
   <div class="app-nav flex-col">
-    <div class="avatar"></div>
     <el-menu
       class="nav-wrapper flex-1"
       :default-active="activeNav"
       :default-openeds="['3', '4']"
     >
+      <div class="avatar"></div>
       <template v-for="(item, row) in navConfig" :key="row">
         <el-sub-menu v-if="item.children" :index="`${row + 1}`">
           <template #title>
@@ -69,10 +69,10 @@ const navConfig = [
         title: '正则表达式',
         path: '/regexp'
       },
-      // {
-      //   title: 'm3u8视频下载',
-      //   path: '/m3u8'
-      // },
+      {
+        title: 'm3u8视频下载',
+        path: '/m3u8'
+      },
     ]
   },
   {
@@ -136,13 +136,13 @@ const handleClick = (opts, index) => {
     background-size: cover;
     background-image: url(../assets/avatar.png);
     background-color: transparent;
-    margin: 0 auto;
+    margin: 20px auto;
   }
   .nav-wrapper {
     border-radius: 14px;
     box-shadow: rgba(0, 0, 0, 0.04) 0px 12px 32px 4px;
     border-right: none !important;
-    margin-top: 20px;
+    // margin-top: 20px;
     :deep(.el-menu-item) {
       font-size: 15px;
     }
