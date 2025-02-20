@@ -15,7 +15,7 @@
           <div class="flex-1">
             <span v-if="downloadLoading">下载进度：{{downloadProgress}}%</span>
           </div>
-          <el-button type="primary" plain :icon="downloadLoading ? null : Position" :loading="downloadLoading" circle @click="handleStart"></el-button>
+          <el-button type="primary" plain :icon="downloadLoading ? null : Position" circle @click="handleStart"></el-button>
         </div>
       </div>
     </div>
@@ -51,6 +51,15 @@ watch(downloadLoading, (newValue) => {
 })
 
 const handleStart = async () => {
+  if (downloadLoading.value) {
+    console.log('取消下载')
+    downloadLoading.value = false
+    downloadProgress.value = 0
+    audioRecorder?.stop?.()
+    videoRecorder?.stop?.()
+    console.log('Recording cancelled by user')
+    return
+  }
   // 正则表达式模式，用于匹配 .m3u8 链接
   const regexPattern = /https?:\/\/[^\s"'()]+\.m3u8(\?.*)?/g
   const m3u8UrlList = inputContent.value.match(regexPattern)
@@ -67,17 +76,20 @@ const handleStart = async () => {
   audioElement = null
   audioRecorder = null
   audioChunks = []
+  downloadLoading.value = true
   let videoM3u8Url = '', audioM3u8Url = ''
   for (let index = 0; index < m3u8UrlList.length; index++) {
     if (videoM3u8Url && audioM3u8Url) break
     const m3u8Url = m3u8UrlList[index]
     const res = await checkMediaTracks(m3u8Url)
-    if (!res) return
+    if (!res) {
+      downloadLoading.value = false
+      return
+    }
     const { hasVideo, hasAudio } = res
     if (hasVideo && hasAudio) {
       downloadType.value = 'video'
       downloadProgress.value = 0
-      downloadLoading.value = true
       downloadVideoByHls(m3u8Url)
       return
     } else if (hasVideo && !hasAudio) {
@@ -91,11 +103,11 @@ const handleStart = async () => {
       title: 'Error',
       message: '未检测到音视频文件'
     })
+    downloadLoading.value = false
     return
   } else if (videoM3u8Url && audioM3u8Url) {
     downloadType.value = 'merge'
     downloadProgress.value = 0
-    downloadLoading.value = true
     downloadVideoByHls(videoM3u8Url)
     downloadAudioByHls(audioM3u8Url)
   } else if (!videoM3u8Url) {
@@ -110,7 +122,6 @@ const handleStart = async () => {
     ).then(() => {
       downloadType.value = 'audio'
       downloadProgress.value = 0
-      downloadLoading.value = true
       downloadAudioByHls(audioM3u8Url)
     }).catch(() => {
       console.log('取消下载')
@@ -127,8 +138,7 @@ const handleStart = async () => {
     ).then(() => {
       downloadType.value = 'video'
       downloadProgress.value = 0
-      downloadLoading.value = true
-      downloadAudioByHls(videoM3u8Url)
+      downloadVideoByHls(videoM3u8Url)
     }).catch(() => {
       console.log('取消下载')
     })
