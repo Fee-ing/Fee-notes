@@ -31,20 +31,16 @@ import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg'
 const inputContent = ref('')
 const downloadLoading = ref(false)
 const downloadProgress = ref(0)
-const downloadType = ref('normal')
+const downloadType = ref('video')
 const documentTitle = document.title
 
 let videoElement = null
 let videoRecorder = null
 let videoChunks = []
-let totalFragmentsVideo = 0
-let loadedFragmentsVideo = 0
 
 let audioElement = null
 let audioRecorder = null
 let audioChunks = []
-let totalFragmentsAudio = 0
-let loadedFragmentsAudio = 0
 
 watch(downloadLoading, (newValue) => {
   if (newValue) {
@@ -55,16 +51,6 @@ watch(downloadLoading, (newValue) => {
 })
 
 const handleStart = async () => {
-  if (downloadLoading.value) {
-    console.log('取消下载')
-    downloadLoading.value = false
-    downloadProgress.value = 0
-    audioRecorder?.stop?.()
-    videoRecorder?.stop?.()
-    console.log('Recording cancelled by user')
-    return
-  }
-
   // 正则表达式模式，用于匹配 .m3u8 链接
   const regexPattern = /https?:\/\/[^\s"'()]+\.m3u8(\?.*)?/g
   const m3u8UrlList = inputContent.value.match(regexPattern)
@@ -75,54 +61,70 @@ const handleStart = async () => {
     })
     return
   }
-  let bol = false
   let videoM3u8Url = '', audioM3u8Url = ''
   for (let index = 0; index < m3u8UrlList.length; index++) {
+    if (videoM3u8Url && audioM3u8Url) break
     const m3u8Url = m3u8UrlList[index]
     const res = await checkMediaTracks(m3u8Url)
     if (!res) return
     const { hasVideo, hasAudio } = res
     if (hasVideo && hasAudio) {
+      downloadType.value = 'video'
+      downloadProgress.value = 0
+      downloadLoading.value = true
       downloadVideoByHls(m3u8Url)
-      bol = true
-      break
-    } else if (hasVideo && audioM3u8Url) {
-      downloadVideoByHls(m3u8Url)
-      downloadAudioByHls(audioM3u8Url)
-      downloadType.value = 'merge'
-      bol = true
-      break
-    } else if (hasAudio && videoM3u8Url) {
-      downloadVideoByHls(videoM3u8Url)
-      downloadAudioByHls(hasAudio)
-      downloadType.value = 'merge'
-      bol = true
-      break
-    } else if (hasVideo && !audioM3u8Url) {
+      return
+    } else if (hasVideo && !hasAudio) {
       videoM3u8Url = m3u8Url
-    } else if (hasAudio && !videoM3u8Url) {
+    } else if (!hasVideo && hasAudio) {
       audioM3u8Url = m3u8Url
     }
-  }
-  if (bol) {
-    downloadProgress.value = 0
-    downloadLoading.value = true
-    return
   }
   if (!videoM3u8Url && !audioM3u8Url) {
     ElNotification.error({
       title: 'Error',
       message: '未检测到音视频文件'
     })
+    return
+  } else if (videoM3u8Url && audioM3u8Url) {
+    downloadType.value = 'merge'
+    downloadProgress.value = 0
+    downloadLoading.value = true
+    downloadVideoByHls(videoM3u8Url)
+    downloadAudioByHls(audioM3u8Url)
   } else if (!videoM3u8Url) {
-    ElNotification.error({
-      title: 'Error',
-      message: '文件只包含音频'
+    ElMessageBox.confirm(
+      '文件只包含音频，是否下载?',
+      '提示',
+      {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }
+    ).then(() => {
+      downloadType.value = 'audio'
+      downloadProgress.value = 0
+      downloadLoading.value = true
+      downloadAudioByHls(audioM3u8Url)
+    }).catch(() => {
+      console.log('取消下载')
     })
   } else if (!audioM3u8Url) {
-    ElNotification.error({
-      title: 'Error',
-      message: '文件不包含音频'
+    ElMessageBox.confirm(
+      '文件不包含音频，是否下载?',
+      '提示',
+      {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }
+    ).then(() => {
+      downloadType.value = 'video'
+      downloadProgress.value = 0
+      downloadLoading.value = true
+      downloadAudioByHls(videoM3u8Url)
+    }).catch(() => {
+      console.log('取消下载')
     })
   }
 }
@@ -214,8 +216,8 @@ const downloadVideoByHls = (videoM3u8Url) => {
     }
   })
 
-  totalFragmentsVideo = 0
-  loadedFragmentsVideo = 0
+  let totalFragmentsVideo = 0
+  let loadedFragmentsVideo = 0
 
   // 监听 LEVEL_LOADED 事件以获取总片段数
   hlsVideo.on(Hls.Events.LEVEL_LOADED, (event, data) => {
@@ -269,23 +271,21 @@ const downloadVideoByHls = (videoM3u8Url) => {
       hlsVideo.on(Hls.Events.FRAG_LOADED, (event, data) => {
         loadedFragmentsVideo++
         const loadProgressVideo = (loadedFragmentsVideo / totalFragmentsVideo) * 100
-        updateProgress(loadProgressVideo, loadedFragmentsAudio, videoElement.currentTime, videoElement.duration, 'progress')
+        updateProgress(loadProgressVideo, videoElement.currentTime, videoElement.duration)
       })
 
       // 监听视频播放时间更新
       videoElement.addEventListener('timeupdate', () => {
         const loadProgressVideo = (loadedFragmentsVideo / totalFragmentsVideo) * 100
-        const loadProgressAudio = (loadedFragmentsAudio / totalFragmentsAudio) * 100
-        updateProgress(loadProgressVideo, loadProgressAudio, videoElement.currentTime, videoElement.duration)
+        updateProgress(loadProgressVideo, videoElement.currentTime, videoElement.duration)
       })
 
       // 录制整个视频时长
       videoElement.addEventListener('ended', () => {
         audioRecorder?.stop?.()
         videoRecorder?.stop?.()
-        console.log('Recording ended')
-
-        downloadLoading.value = false
+        downloadProgress.value = 100
+        console.log(`Download Progress: ${downloadProgress.value}%`)
       })
     } catch (error) {
       console.error('Failed to play video:', error)
@@ -332,8 +332,8 @@ const downloadAudioByHls = (audioM3u8Url) => {
     }
   })
 
-  totalFragmentsAudio = 0
-  loadedFragmentsAudio = 0
+  let totalFragmentsAudio = 0
+  let loadedFragmentsAudio = 0
 
   hlsAudio.on(Hls.Events.LEVEL_LOADED, (event, data) => {
     if (data.details && data.details.fragments) {
@@ -359,15 +359,6 @@ const downloadAudioByHls = (audioM3u8Url) => {
 
       const audioStream = mediaStreamDestination.stream
 
-      // const hasAudioTrack = audioStream.getAudioTracks().length > 0
-      // console.log(`Has Audio Track: ${hasAudioTrack}`)
-
-      // if (!hasAudioTrack) {
-      //   console.error('Audio track missing in the streams.')
-      //   downloadLoading.value = false
-      //   return
-      // }
-
       audioRecorder = new MediaRecorder(audioStream, {
         mimeType: 'audio/webm;codecs=opus',
         audioBitsPerSecond: 192000   // 设置音频比特率为 192 kbps
@@ -382,6 +373,9 @@ const downloadAudioByHls = (audioM3u8Url) => {
 
       audioRecorder.onstop = () => {
         console.log('Audio recording stopped')
+        if (downloadType.value === 'audio') {
+          downloadMp4(audioChunks)
+        }
         hlsAudio.destroy()
         downloadLoading.value = false
       }
@@ -390,13 +384,26 @@ const downloadAudioByHls = (audioM3u8Url) => {
       audioRecorder.start()
       console.log('Audio Recordings started')
 
-      // 监听加载和录制进度
-      hlsAudio.on(Hls.Events.FRAG_LOADED, (event, data) => {
-        loadedFragmentsAudio++
-        const loadProgressAudio = (loadedFragmentsAudio / totalFragmentsAudio) * 100
-        updateProgress(loadedFragmentsVideo, loadProgressAudio, videoElement.currentTime, videoElement.duration)
-      })
+      if (downloadType.value === 'audio') {
+        // 监听加载和录制进度
+        hlsAudio.on(Hls.Events.FRAG_LOADED, (event, data) => {
+          loadedFragmentsAudio++
+          const loadProgressAudio = (loadedFragmentsAudio / totalFragmentsAudio) * 100
+          updateProgress(loadProgressAudio, audioElement.currentTime, audioElement.duration)
+        })
 
+        // 监听视频播放时间更新
+        audioElement.addEventListener('timeupdate', () => {
+          const loadProgressAudio = (loadedFragmentsAudio / totalFragmentsAudio) * 100
+          updateProgress(loadProgressAudio, audioElement.currentTime, audioElement.duration)
+        })
+
+        audioElement.addEventListener('ended', () => {
+          audioRecorder?.stop?.()
+          downloadProgress.value = 100
+          console.log(`Download Progress: ${downloadProgress.value}%`)
+        })
+      }
     } catch (error) {
       console.error('Failed to play audio:', error)
       errorFunc()
@@ -405,18 +412,12 @@ const downloadAudioByHls = (audioM3u8Url) => {
 }
 
 // 更新进度
-const updateProgress = (loadProgressVideo, loadProgressAudio, currentTimeVideo, durationVideo, type) => {
-  let recordProgressVideo = 0
-  let recordProgressAudio = 0
-  if (!isNaN(durationVideo) && durationVideo !== Infinity) {
-    recordProgressVideo = (currentTimeVideo / durationVideo) * 100
-  }
-  const overallProgressVideo = (loadProgressVideo + recordProgressVideo) / 2 // 综合加载和录制进度
-  const overallProgressAudio = (loadProgressAudio + recordProgressAudio) / 2 // 综合加载和录制进度
-  const overallProgress = (overallProgressVideo + overallProgressAudio) / 2 // 综合音视频进度
-
-  if (type === 'progress') {
-    downloadProgress.value = downloadType.value === 'normal' ? overallProgressVideo.toFixed(2) : overallProgress.toFixed(2)
+const updateProgress = (loadProgress, currentTime, duration, type) => {
+  const recordProgress = (currentTime / duration) * 100
+  const overallProgress = (loadProgress + recordProgress) / 2
+  if (overallProgress) {
+    downloadProgress.value = overallProgress.toFixed(2)
+    console.log(`Download Progress: ${downloadProgress.value}%`)
     if (downloadLoading.value) {
       document.title = `下载进度${downloadProgress.value}% - ${documentTitle}`
     }
