@@ -10,10 +10,10 @@ module.exports = defineConfig({
       })
   },
   publicPath: '/Fee-notes/',
-  // devServer: {
-  //   headers: {
-  //     'Cross-Origin-Embedder-Policy': 'require-corp',
-  //     'Cross-Origin-Opener-Policy': 'same-origin'
-  //   }
-  // },
+  devServer: {
+    headers: {
+      'Cross-Origin-Embedder-Policy': 'require-corp',
+      'Cross-Origin-Opener-Policy': 'same-origin'
+    }
+  },
 })
