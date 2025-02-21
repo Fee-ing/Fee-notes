@@ -153,6 +153,16 @@ const webList = [
     link: 'https://github.com/mattboldt/typed.js',
     description: '专门用于创建打字动画效果的 JavaScript 库'
   },
+  {
+    title: 'Ffmpeg.wasm',
+    link: 'https://github.com/ffmpegwasm/ffmpeg.wasm',
+    description: 'ffmpeg.wasm 是 FFmpeg 的纯 Webassembly / Javascript 版本。它可以在浏览器中实现视频和音频的录制、转换和流传输'
+  },
+  {
+    title: 'HLS.js',
+    link: 'https://github.com/video-dev/hls.js',
+    description: 'HLS.js是一个实现HTTP Live Streaming客户端的JavaScript库'
+  },
 ]
 </script>
 

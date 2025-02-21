@@ -16,13 +16,24 @@
             <span v-if="downloadLoading">下载进度：{{downloadProgress}}%</span>
           </div>
           <el-button
+            class="start-button"
+            v-if="!downloadLoading"
             type="primary"
             plain
             circle
-            :icon="downloadLoading ? null : Position"
-            
+            :icon="Promotion"
             @click="handleStart"
           ></el-button>
+          <el-button
+            class="cancel-button"
+            v-else
+            type="primary"
+            plain
+            circle
+            @click="handleCancel"
+          >
+            <div class="footer-block"></div>
+          </el-button>
         </div>
       </div>
     </div>
@@ -32,8 +43,9 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { ElNotification, ElMessageBox } from 'element-plus'
-import { Position } from '@element-plus/icons-vue'
-import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg'
+import { Promotion } from '@element-plus/icons-vue'
+import { FFmpeg } from '@ffmpeg/ffmpeg'
+import { fetchFile } from '@ffmpeg/util'
 
 const inputContent = ref('')
 const downloadLoading = ref(false)
@@ -58,15 +70,6 @@ watch(downloadLoading, (newValue) => {
 })
 
 const handleStart = async () => {
-  if (downloadLoading.value) {
-    console.log('取消下载')
-    downloadLoading.value = false
-    downloadProgress.value = 0
-    audioRecorder?.stop?.()
-    videoRecorder?.stop?.()
-    console.log('Recording cancelled by user')
-    return
-  }
   // 正则表达式模式，用于匹配 .m3u8 链接
   const regexPattern = /https?:\/\/[^\s"'()]+\.m3u8(\?.*)?/g
   const m3u8UrlList = inputContent.value.match(regexPattern)
@@ -113,14 +116,6 @@ const handleStart = async () => {
     downloadLoading.value = false
     return
   } else if (videoM3u8Url && audioM3u8Url) {
-    // if (typeof SharedArrayBuffer === 'undefined') {
-    //   console.error('SharedArrayBuffer is not supported in this environment.')
-    //   ElNotification.error({
-    //     title: 'Error',
-    //     message: 'SharedArrayBuffer is not supported in this environment'
-    //   })
-    //   return
-    // }
     downloadType.value = 'merge'
     downloadProgress.value = 0
     downloadVideoByHls(videoM3u8Url)
@@ -160,6 +155,15 @@ const handleStart = async () => {
   }
 }
 
+const handleCancel = () => {
+  downloadLoading.value = false
+  downloadProgress.value = 0
+  audioRecorder?.stop?.()
+  videoRecorder?.stop?.()
+  console.log('Recording cancelled by user')
+}
+
+// 判断.m3u8文件是否包含音视频轨道
 const checkMediaTracks = async (m3u8Url) => {
   return new Promise((resolve) => {
     const hls = new Hls()
@@ -455,24 +459,21 @@ const updateProgress = (loadProgress, currentTime, duration, type) => {
   }
 }
 
-// 合并视频和音频文件
+// 合并音视频
 const mergeFiles = async () => {
   console.log('Merging files...')
-  const ffmpeg = createFFmpeg({
-    log: true,
-    corePath: 'https://unpkg.com/@ffmpeg/core@0.10.0/dist/ffmpeg-core.js', // 单线程版本
-  })
-  await ffmpeg.load()
 
+  const ffmpeg = new FFmpeg()
+  await ffmpeg.load()
   const audioBlob = new Blob(audioChunks, { type: 'audio/webm' })
   const videoBlob = new Blob(videoChunks, { type: 'video/webm' })
 
-  ffmpeg.FS('writeFile', 'input_audio.webm', await fetchFile(audioBlob))
-  ffmpeg.FS('writeFile', 'input_video.webm', await fetchFile(videoBlob))
+  await ffmpeg.writeFile('input_audio.webm', await fetchFile(audioBlob))
+  await ffmpeg.writeFile('input_video.webm', await fetchFile(videoBlob))
 
-  await ffmpeg.run('-i', 'input_audio.webm', '-i', 'input_video.webm', '-c:v', 'copy', '-c:a', 'aac', 'output.mp4')
+  await ffmpeg.exec(['-i', 'input_audio.webm', '-i', 'input_video.webm', '-c:v', 'copy', '-c:a', 'aac', 'output.mp4'])
 
-  const data = ffmpeg.FS('readFile', 'output.mp4')
+  const data = await ffmpeg.readFile('output.mp4')
   downloadMp4([data.buffer])
 }
 
@@ -511,6 +512,28 @@ const downloadMp4 = (chunks) => {
     }
     .input-footer {
       padding: 10px 10px 10px 20px;
+      :deep(.el-button) {
+        width: 32px;
+        height: 32px;
+        overflow: hidden;
+      }
+      .footer-block {
+        width: 14px;
+        height: 14px;
+        border-radius: 3px;
+        background-color: var(--el-menu-active-color);
+        transition: .1s;
+      }
+      .start-button {
+        font-size: 18px;
+      }
+      .cancel-button {
+        &:hover {
+          .footer-block {
+            background-color: #fff;
+          }
+        }
+      }
     }
   }
   
