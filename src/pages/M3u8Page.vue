@@ -37,6 +37,7 @@ import { ElNotification, ElMessageBox } from 'element-plus'
 import { Promotion } from '@element-plus/icons-vue'
 import { FFmpeg } from '@ffmpeg/ffmpeg'
 import { fetchFile } from '@ffmpeg/util'
+import Hls from 'hls.js'
 
 const inputContent = ref('')
 const downloadLoading = ref(false)
@@ -314,7 +315,7 @@ const downloadVideoByHls = (videoM3u8Url) => {
       videoElement.addEventListener('ended', () => {
         audioRecorder?.stop?.()
         videoRecorder?.stop?.()
-        downloadProgress.value = 99.9
+        downloadProgress.value = 99
         console.log(`Download Progress: ${downloadProgress.value}%`)
       })
     } catch (error) {
@@ -430,7 +431,7 @@ const downloadAudioByHls = (audioM3u8Url) => {
 
         audioElement.addEventListener('ended', () => {
           audioRecorder?.stop?.()
-          downloadProgress.value = 99.9
+          downloadProgress.value = 99
           console.log(`Download Progress: ${downloadProgress.value}%`)
         })
       }
@@ -461,7 +462,6 @@ const mergeFiles = async () => {
   ffmpeg.on('progress', ({ progress }) => {
     console.log(`Merging progress: ${progress}%`)
     if (progress >= 1) {
-      downloadProgress.value = 100
       downloadLoading.value = false
     }
   })
