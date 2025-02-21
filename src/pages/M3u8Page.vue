@@ -55,7 +55,7 @@ let audioChunks = []
 
 watch(downloadLoading, (newValue) => {
   if (newValue) {
-    document.title = `下载进度${downloadProgress.value}% - ${documentTitle}`
+    document.title = `${downloadProgress.value}% - ${documentTitle}`
   } else {
     document.title = documentTitle
   }
@@ -449,7 +449,7 @@ const updateProgress = (loadProgress, currentTime, duration, type) => {
   if (overallProgress) {
     downloadProgress.value = overallProgress.toFixed(2)
     if (downloadLoading.value) {
-      document.title = `下载进度${downloadProgress.value}% - ${documentTitle}`
+      document.title = `${downloadProgress.value}% - ${documentTitle}`
     }
   }
 }
