@@ -16,23 +16,14 @@
             <span v-if="downloadLoading">下载进度：{{downloadProgress}}%</span>
           </div>
           <el-button
-            class="start-button"
-            v-if="!downloadLoading"
+            class="footer-button"
             type="primary"
             plain
             circle
-            :icon="Promotion"
             @click="handleStart"
-          ></el-button>
-          <el-button
-            class="cancel-button"
-            v-else
-            type="primary"
-            plain
-            circle
-            @click="handleCancel"
           >
-            <div class="footer-block"></div>
+            <div v-if="downloadLoading" class="footer-block"></div>
+            <el-icon v-else><Promotion /></el-icon>
           </el-button>
         </div>
       </div>
@@ -70,6 +61,10 @@ watch(downloadLoading, (newValue) => {
 })
 
 const handleStart = async () => {
+  if (downloadLoading.value) {
+    cancelDownload()
+    return
+  }
   // 正则表达式模式，用于匹配 .m3u8 链接
   const regexPattern = /https?:\/\/[^\s"'()]+\.m3u8(\?.*)?/g
   const m3u8UrlList = inputContent.value.match(regexPattern)
@@ -80,12 +75,7 @@ const handleStart = async () => {
     })
     return
   }
-  videoElement = null
-  videoRecorder = null
-  videoChunks = []
-  audioElement = null
-  audioRecorder = null
-  audioChunks = []
+  resetData()
   downloadLoading.value = true
   let videoM3u8Url = '', audioM3u8Url = ''
   for (let index = 0; index < m3u8UrlList.length; index++) {
@@ -99,7 +89,6 @@ const handleStart = async () => {
     const { hasVideo, hasAudio } = res
     if (hasVideo && hasAudio) {
       downloadType.value = 'video'
-      downloadProgress.value = 0
       downloadVideoByHls(m3u8Url)
       return
     } else if (hasVideo && !hasAudio) {
@@ -117,7 +106,6 @@ const handleStart = async () => {
     return
   } else if (videoM3u8Url && audioM3u8Url) {
     downloadType.value = 'merge'
-    downloadProgress.value = 0
     downloadVideoByHls(videoM3u8Url)
     downloadAudioByHls(audioM3u8Url)
   } else if (!videoM3u8Url) {
@@ -131,7 +119,6 @@ const handleStart = async () => {
       }
     ).then(() => {
       downloadType.value = 'audio'
-      downloadProgress.value = 0
       downloadAudioByHls(audioM3u8Url)
     }).catch(() => {
       console.log('取消下载')
@@ -147,7 +134,6 @@ const handleStart = async () => {
       }
     ).then(() => {
       downloadType.value = 'video'
-      downloadProgress.value = 0
       downloadVideoByHls(videoM3u8Url)
     }).catch(() => {
       console.log('取消下载')
@@ -155,9 +141,18 @@ const handleStart = async () => {
   }
 }
 
-const handleCancel = () => {
-  downloadLoading.value = false
+const resetData = () => {
+  videoElement = null
+  videoRecorder = null
+  videoChunks = []
+  audioElement = null
+  audioRecorder = null
+  audioChunks = []
   downloadProgress.value = 0
+}
+
+const cancelDownload = () => {
+  downloadLoading.value = false
   audioRecorder?.stop?.()
   videoRecorder?.stop?.()
   console.log('Recording cancelled by user')
@@ -224,6 +219,7 @@ const downloadVideoByHls = (videoM3u8Url) => {
   const errorFunc = () => {
     audioRecorder?.stop?.()
     videoRecorder?.stop?.()
+    downloadLoading.value = false
     ElNotification.error({
       title: 'Error',
       message: '下载视频失败'
@@ -295,7 +291,6 @@ const downloadVideoByHls = (videoM3u8Url) => {
           downloadMp4(videoChunks)
         }
         hlsVideo.destroy()
-        downloadLoading.value = false
       }
 
       // 开始录制
@@ -319,7 +314,7 @@ const downloadVideoByHls = (videoM3u8Url) => {
       videoElement.addEventListener('ended', () => {
         audioRecorder?.stop?.()
         videoRecorder?.stop?.()
-        downloadProgress.value = 100
+        downloadProgress.value = 99.9
         console.log(`Download Progress: ${downloadProgress.value}%`)
       })
     } catch (error) {
@@ -341,6 +336,7 @@ const downloadAudioByHls = (audioM3u8Url) => {
   const errorFunc = () => {
     audioRecorder?.stop?.()
     videoRecorder?.stop?.()
+    downloadLoading.value = false
     ElNotification.error({
       title: 'Error',
       message: '下载音频失败'
@@ -412,7 +408,6 @@ const downloadAudioByHls = (audioM3u8Url) => {
           downloadMp4(audioChunks)
         }
         hlsAudio.destroy()
-        downloadLoading.value = false
       }
 
       // 开始录制
@@ -435,7 +430,7 @@ const downloadAudioByHls = (audioM3u8Url) => {
 
         audioElement.addEventListener('ended', () => {
           audioRecorder?.stop?.()
-          downloadProgress.value = 100
+          downloadProgress.value = 99.9
           console.log(`Download Progress: ${downloadProgress.value}%`)
         })
       }
@@ -452,7 +447,6 @@ const updateProgress = (loadProgress, currentTime, duration, type) => {
   const overallProgress = (loadProgress + recordProgress) / 2
   if (overallProgress) {
     downloadProgress.value = overallProgress.toFixed(2)
-    console.log(`Download Progress: ${downloadProgress.value}%`)
     if (downloadLoading.value) {
       document.title = `下载进度${downloadProgress.value}% - ${documentTitle}`
     }
@@ -464,6 +458,13 @@ const mergeFiles = async () => {
   console.log('Merging files...')
 
   const ffmpeg = new FFmpeg()
+  ffmpeg.on('progress', ({ progress }) => {
+    console.log(`Merging progress: ${progress}%`)
+    if (progress >= 1) {
+      downloadProgress.value = 100
+      downloadLoading.value = false
+    }
+  })
   await ffmpeg.load()
   const audioBlob = new Blob(audioChunks, { type: 'audio/webm' })
   const videoBlob = new Blob(videoChunks, { type: 'video/webm' })
@@ -524,10 +525,8 @@ const downloadMp4 = (chunks) => {
         background-color: var(--el-menu-active-color);
         transition: .1s;
       }
-      .start-button {
+      .footer-button {
         font-size: 18px;
-      }
-      .cancel-button {
         &:hover {
           .footer-block {
             background-color: #fff;
