@@ -13,7 +13,7 @@
         ></el-input>
         <div class="input-footer flex-v">
           <div class="flex-1">
-            <span v-if="downloadLoading">下载进度：{{downloadProgress}}%</span>
+            <span class="footer-tip" v-if="downloadLoading">下载进度：{{downloadProgress}}%</span>
           </div>
           <el-button
             class="footer-button"
@@ -517,6 +517,9 @@ const downloadMp4 = (chunks) => {
         width: 32px;
         height: 32px;
         overflow: hidden;
+      }
+      .footer-tip {
+        color: var(--el-menu-active-color);
       }
       .footer-block {
         width: 14px;
