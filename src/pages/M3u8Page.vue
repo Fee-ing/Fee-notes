@@ -77,6 +77,20 @@ const handleStart = async () => {
     return
   }
   resetData()
+  startDownload(m3u8UrlList)
+}
+
+const resetData = () => {
+  videoElement = null
+  videoRecorder = null
+  videoChunks = []
+  audioElement = null
+  audioRecorder = null
+  audioChunks = []
+  downloadProgress.value = 0
+}
+
+const startDownload = async (m3u8UrlList) => {
   downloadLoading.value = true
   let videoM3u8Url = '', audioM3u8Url = ''
   for (let index = 0; index < m3u8UrlList.length; index++) {
@@ -90,7 +104,7 @@ const handleStart = async () => {
     const { hasVideo, hasAudio } = res
     if (hasVideo && hasAudio) {
       downloadType.value = 'video'
-      downloadVideoByHls(m3u8Url)
+      getVideoChunksByHls(m3u8Url)
       return
     } else if (hasVideo && !hasAudio) {
       videoM3u8Url = m3u8Url
@@ -107,11 +121,11 @@ const handleStart = async () => {
     return
   } else if (videoM3u8Url && audioM3u8Url) {
     downloadType.value = 'merge'
-    downloadVideoByHls(videoM3u8Url)
-    downloadAudioByHls(audioM3u8Url)
+    getVideoChunksByHls(videoM3u8Url)
+    getAudioChunksByHls(audioM3u8Url)
   } else if (!videoM3u8Url) {
     ElMessageBox.confirm(
-      '文件只包含音频，是否下载?',
+      '文件只包含音频（可额外输入视频链接），是否下载?',
       '提示',
       {
         confirmButtonText: '确定',
@@ -120,13 +134,13 @@ const handleStart = async () => {
       }
     ).then(() => {
       downloadType.value = 'audio'
-      downloadAudioByHls(audioM3u8Url)
+      getAudioChunksByHls(audioM3u8Url)
     }).catch(() => {
       console.log('取消下载')
     })
   } else if (!audioM3u8Url) {
     ElMessageBox.confirm(
-      '文件不包含音频，是否下载?',
+      '文件不包含音频（可额外输入音频链接），是否下载?',
       '提示',
       {
         confirmButtonText: '确定',
@@ -135,21 +149,11 @@ const handleStart = async () => {
       }
     ).then(() => {
       downloadType.value = 'video'
-      downloadVideoByHls(videoM3u8Url)
+      getVideoChunksByHls(videoM3u8Url)
     }).catch(() => {
       console.log('取消下载')
     })
   }
-}
-
-const resetData = () => {
-  videoElement = null
-  videoRecorder = null
-  videoChunks = []
-  audioElement = null
-  audioRecorder = null
-  audioChunks = []
-  downloadProgress.value = 0
 }
 
 const cancelDownload = () => {
@@ -208,7 +212,7 @@ const checkMediaTracks = async (m3u8Url) => {
   })
 }
 
-const downloadVideoByHls = (videoM3u8Url) => {
+const getVideoChunksByHls = (videoM3u8Url) => {
   videoElement = document.createElement('video')
   videoElement.volume = 0.001
   const hlsVideo = new Hls()
@@ -325,7 +329,7 @@ const downloadVideoByHls = (videoM3u8Url) => {
   })
 }
 
-const downloadAudioByHls = (audioM3u8Url) => {
+const getAudioChunksByHls = (audioM3u8Url) => {
   audioElement = document.createElement('audio')
   
   const hlsAudio = new Hls()
