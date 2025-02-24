@@ -317,9 +317,14 @@ const getVideoChunksByHls = (videoM3u8Url) => {
 
       // 录制整个视频时长
       videoElement.addEventListener('ended', () => {
+        if (downloadType.value === 'merge') {
+          downloadProgress.value = 99
+        } else {
+          downloadProgress.value = 100
+          downloadLoading.value = false
+        }
         audioRecorder?.stop?.()
         videoRecorder?.stop?.()
-        downloadProgress.value = 99
         console.log(`Download Progress: ${downloadProgress.value}%`)
       })
     } catch (error) {
@@ -434,8 +439,13 @@ const getAudioChunksByHls = (audioM3u8Url) => {
         })
 
         audioElement.addEventListener('ended', () => {
+          if (downloadType.value === 'merge') {
+            downloadProgress.value = 99
+          } else {
+            downloadProgress.value = 100
+            downloadLoading.value = false
+          }
           audioRecorder?.stop?.()
-          downloadProgress.value = 99
           console.log(`Download Progress: ${downloadProgress.value}%`)
         })
       }
