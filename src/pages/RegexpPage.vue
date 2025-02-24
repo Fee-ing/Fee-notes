@@ -338,6 +338,9 @@ const handleClear = () => {
           font-style: normal;
           font-weight: normal;
           background-color: #FCFF99;
+          word-break: break-all;
+          white-space: normal;
+          overflow-wrap: break-word;
           &.select {
             opacity: 0;
           }

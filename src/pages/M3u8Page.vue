@@ -6,7 +6,7 @@
           v-model="inputContent"
           type="textarea"
           resize="none"
-          :rows="2"
+          :rows="3"
           :disabled="downloadLoading"
           placeholder="请输入.m3u8格式的链接"
           class="input-content"

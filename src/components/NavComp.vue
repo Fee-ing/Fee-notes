@@ -50,8 +50,8 @@ const navConfig = [
     path: '/plugins'
   },
   {
-    title: '常用工具',
-    icon: 'SetUp',
+    title: '前端工具',
+    icon: 'Document',
     children: [
       {
         title: '代码格式化',
@@ -69,6 +69,18 @@ const navConfig = [
         title: '正则表达式',
         path: '/regexp'
       },
+      {
+        title: '时间、颜色转换',
+        path: '/transfer'
+      },
+      {
+        title: 'PS投影转CSS3',
+        path: '/shadow'
+      },
+      {
+        title: 'CSS三角形生成器',
+        path: '/triangle'
+      },
     ]
   },
   {
@@ -79,22 +91,11 @@ const navConfig = [
         title: 'm3u8视频下载',
         path: '/m3u8'
       },
-      {
-        title: '时间、颜色转换',
-        path: '/transfer'
-      },
+      
       // {
       //   title: '图片拼接',
       //   path: '/stitch'
       // },
-      {
-        title: 'CSS三角形生成器',
-        path: '/triangle'
-      },
-      {
-        title: 'PS投影转CSS3',
-        path: '/shadow'
-      },
     ]
   },
   // {
