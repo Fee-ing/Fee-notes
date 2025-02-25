@@ -135,6 +135,9 @@ onMounted(() => {
     &:not(:first-child) {
       margin-left: 20px;
     }
+    :deep(.el-card__header) {
+      border-bottom: none;
+    }
     .card-header {
       font-size: 15px;
       font-weight: 600;

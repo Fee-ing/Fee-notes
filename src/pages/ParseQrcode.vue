@@ -120,6 +120,8 @@ onMounted(async () => {
     }
   }
   .uploader-wrapper {
+    width: 200px;
+    height: 200px;
     :deep(.el-upload) {
       cursor: pointer;
       position: relative;
