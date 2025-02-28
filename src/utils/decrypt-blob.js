@@ -97,15 +97,16 @@ export const parseM3u8ToTsUrls = async (m3u8Url) => {
 
 export async function decryptBlob(encryptedBlob, keyInfo) {
   try {
-    if (!keyInfo?.uri) throw new Error("未提供密钥 URI")
+    if (!keyInfo?.uri) {
+      console.log('未提供密钥 URI')
+      return null
+    }
 
     // 获取密钥
     const key = await getKeyData(keyInfo.uri)
-    console.log("密钥长度:", key.length, "内容:", key.slice(0, 4))
 
     // 获取 IV
     const iv = parseIV(keyInfo.iv)
-    console.log("IV 值:", iv)
 
     // 解密操作
     const decrypted = await crypto.subtle.decrypt(
@@ -116,10 +117,7 @@ export async function decryptBlob(encryptedBlob, keyInfo) {
 
     return new Blob([decrypted], { type: 'video/mp2t' })
   } catch (err) {
-    console.error("解密失败详情:")
-    console.error("密钥 URI:", keyInfo?.uri)
-    console.error("IV:", keyInfo?.iv)
-    console.error("错误信息:", err)
+    console.error('错误信息:', err)
     return null
   }
 }

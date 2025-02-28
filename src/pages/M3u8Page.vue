@@ -85,7 +85,7 @@ const handleStart = async () => {
   downloadProgress.value = 0
   downloadLoading.value = true
   if (downloadRadio.value === '1') {
-    downloadM3u8ByTsUrls(m3u8UrlList[0])
+    downloadByTsUrls(m3u8UrlList[0])
   } else if (downloadRadio.value === '2') {
     resetData()
     startDownloadByHls(m3u8UrlList)
@@ -102,7 +102,7 @@ const resetData = () => {
   
 }
 
-const downloadM3u8ByTsUrls = async (m3u8Url) => {
+const downloadByTsUrls = async (m3u8Url) => {
   try {
     // 1. 解析.m3u8文件
     const { tsList, keyInfo, error } = await parseM3u8ToTsUrls(m3u8Url)
@@ -137,10 +137,12 @@ const downloadM3u8ByTsUrls = async (m3u8Url) => {
     const tsBuffers = await Promise.all(tsBlobs.map(blob => blob.arrayBuffer()))
 
     const ffmpeg = new FFmpeg()
+    ffmpeg.on('log', ({ message }) => console.log(message))
     await ffmpeg.load()
-    tsBuffers.forEach(async (buffer, index) => {
+    for (let index = 0; index < tsBuffers.length; index++) {
+      const buffer = tsBuffers[index]
       await ffmpeg.writeFile(`${index}.ts`, new Uint8Array(buffer))
-    })
+    }
     let fileList = ''
     for (let i = 0; i < tsBuffers.length; i++) {
       fileList += `file '${i}.ts'\n`
@@ -550,6 +552,7 @@ const mergeFiles = async () => {
       downloadLoading.value = false
     }
   })
+  ffmpeg.on('log', ({ message }) => console.log(message))
   await ffmpeg.load()
   const audioBlob = new Blob(audioChunks, { type: 'audio/webm' })
   const videoBlob = new Blob(videoChunks, { type: 'video/webm' })
@@ -557,6 +560,7 @@ const mergeFiles = async () => {
   await ffmpeg.writeFile('input_audio.webm', await fetchFile(audioBlob))
   await ffmpeg.writeFile('input_video.webm', await fetchFile(videoBlob))
 
+  console.log(111111111)
   await ffmpeg.exec(['-i', 'input_audio.webm', '-i', 'input_video.webm', '-c:v', 'copy', '-c:a', 'aac', 'output.mp4'])
 
   const data = await ffmpeg.readFile('output.mp4')
@@ -623,6 +627,10 @@ const downloadMp4 = (chunks) => {
           .footer-block {
             background-color: #fff;
           }
+        }
+        &:focus {
+          color: var(--el-menu-active-color);
+          background-color: transparent;
         }
       }
     }
