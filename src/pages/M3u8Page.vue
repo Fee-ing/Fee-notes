@@ -12,8 +12,12 @@
           class="input-content"
         ></el-input>
         <div class="input-footer flex-v">
-          <div class="flex-1">
-            <span class="footer-tip" v-if="downloadLoading">下载进度：{{downloadProgress}}%</span>
+          <div class="flex-1 flex-v">
+            <span class="footer-tip">下载方式：</span>
+            <el-radio-group v-model="downloadRadio">
+              <el-radio label="1" size="small">Ts 片段</el-radio>
+              <el-radio label="2" size="small">Hls 录制</el-radio>
+            </el-radio-group>
           </div>
           <el-button
             class="footer-button"
@@ -38,10 +42,12 @@ import { Promotion } from '@element-plus/icons-vue'
 import { FFmpeg } from '@ffmpeg/ffmpeg'
 import { fetchFile } from '@ffmpeg/util'
 import Hls from 'hls.js'
+import { parseM3u8ToTsUrls, decryptBlob } from '../utils/decrypt-blob'
 
 const inputContent = ref('')
 const downloadLoading = ref(false)
 const downloadProgress = ref(0)
+const downloadRadio = ref('1')
 const downloadType = ref('video')
 const documentTitle = document.title
 
@@ -76,8 +82,14 @@ const handleStart = async () => {
     })
     return
   }
-  resetData()
-  startDownload(m3u8UrlList)
+  downloadProgress.value = 0
+  downloadLoading.value = true
+  if (downloadRadio.value === '1') {
+    downloadM3u8ByTsUrls(m3u8UrlList[0])
+  } else if (downloadRadio.value === '2') {
+    resetData()
+    startDownloadByHls(m3u8UrlList)
+  }
 }
 
 const resetData = () => {
@@ -87,11 +99,70 @@ const resetData = () => {
   audioElement = null
   audioRecorder = null
   audioChunks = []
-  downloadProgress.value = 0
+  
 }
 
-const startDownload = async (m3u8UrlList) => {
-  downloadLoading.value = true
+const downloadM3u8ByTsUrls = async (m3u8Url) => {
+  try {
+    // 1. 解析.m3u8文件
+    const { tsList, keyInfo, error } = await parseM3u8ToTsUrls(m3u8Url)
+    if (error) {
+      ElNotification({
+        title: '提示',
+        message: error
+      })
+      downloadLoading.value = false
+      return
+    }
+
+    // 2. 下载所有.ts片段
+    const tsBlobs = []
+    for (const [index, url] of tsList.entries()) {
+      if (!downloadLoading.value) {
+        break
+      }
+      const response = await fetch(url)
+      if (!response.ok) {
+        console.log(`下载片段失败: ${url}`)
+      }
+      let blob = await response.blob()
+      if (keyInfo) {
+        blob = await decryptBlob(blob, keyInfo)
+      }
+      if (blob) tsBlobs.push(blob)
+      downloadProgress.value = (((index + 1) / tsList.length) * 100).toFixed(2)
+      document.title = `${downloadProgress.value}% - ${documentTitle}`
+    }
+
+    const tsBuffers = await Promise.all(tsBlobs.map(blob => blob.arrayBuffer()))
+
+    const ffmpeg = new FFmpeg()
+    await ffmpeg.load()
+    tsBuffers.forEach(async (buffer, index) => {
+      await ffmpeg.writeFile(`${index}.ts`, new Uint8Array(buffer))
+    })
+    let fileList = ''
+    for (let i = 0; i < tsBuffers.length; i++) {
+      fileList += `file '${i}.ts'\n`
+    }
+    await ffmpeg.writeFile('fileList.txt', new TextEncoder().encode(fileList))
+    await ffmpeg.exec(['-f', 'concat', '-safe', '0', '-i', 'fileList.txt', '-c', 'copy', '-movflags', 'faststart', 'output.mp4'])
+
+    // 获取合并后的视频文件
+    const data = await ffmpeg.readFile('output.mp4')
+    downloadMp4([data.buffer])
+
+    downloadLoading.value = false
+  } catch (error) {
+    ElNotification.error({
+      title: '提示',
+      message: '下载过程中出错'
+    })
+    downloadLoading.value = false
+  }
+}
+
+const startDownloadByHls = async (m3u8UrlList) => {
   let videoM3u8Url = '', audioM3u8Url = ''
   for (let index = 0; index < m3u8UrlList.length; index++) {
     if (videoM3u8Url && audioM3u8Url) break
@@ -532,7 +603,11 @@ const downloadMp4 = (chunks) => {
         height: 32px;
         overflow: hidden;
       }
+      :deep(.el-radio) {
+        margin-right: 15px;
+      }
       .footer-tip {
+        font-size: 12px;
         color: var(--el-menu-active-color);
       }
       .footer-block {
