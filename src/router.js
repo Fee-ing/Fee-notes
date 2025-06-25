@@ -9,7 +9,8 @@ import Regexp from '@/pages/RegexpPage.vue'
 import Transfer from '@/pages/TransferPage.vue'
 import Movie from '@/pages/MoviePage.vue'
 import Stitch from '@/pages/StitchPage.vue'
-import M3u8 from '@/pages/M3u8Page.vue'
+import M3u8HLS from '@/pages/M3u8HLSPage.vue'
+import M3u8TS from '@/pages/M3u8TSPage.vue'
 
 const routes = [
   {
@@ -91,10 +92,17 @@ const routes = [
     }
   },
   {
-    path: '/m3u8',
-    component: M3u8,
+    path: '/m3u8_hls',
+    component: M3u8HLS,
     meta: {
-      title: 'm3u8视频下载'
+      title: 'HLS录制-m3u8视频下载'
+    }
+  },
+  {
+    path: '/m3u8_ts',
+    component: M3u8TS,
+    meta: {
+      title: 'TS分片-m3u8视频下载'
     }
   }
 ]

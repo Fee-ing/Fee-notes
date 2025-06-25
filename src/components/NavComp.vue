@@ -84,14 +84,17 @@ const navConfig = [
     ]
   },
   {
-    title: '其他工具',
+    title: 'm3u8视频下载',
     icon: 'FolderOpened',
     children: [
       {
-        title: 'm3u8视频下载',
-        path: '/m3u8'
+        title: 'HLSl录制',
+        path: '/m3u8_hls'
       },
-      
+      {
+        title: 'TS分片',
+        path: '/m3u8_ts'
+      },
       // {
       //   title: '图片拼接',
       //   path: '/stitch'

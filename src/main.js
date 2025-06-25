@@ -18,6 +18,10 @@ import ElementPlus from 'element-plus'
 import * as Icons from '@element-plus/icons-vue'
 import 'element-plus/dist/index.css'
 
+import './utils/stream-saver.js'
+import './utils/mux.js'
+import m3u8DownloaderPlugin from './utils/m3u8.js'
+
 import App from './App.vue'
 import routes from './router'
 import './styles/main.less'
@@ -46,6 +50,7 @@ const app = createApp(App)
 app.use(router)
 app.use(ElementPlus)
 app.use(hljsVuePlugin)
+app.use(m3u8DownloaderPlugin)
 
 const Icon = (props) => {
   const { icon } = props

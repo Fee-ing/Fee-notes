@@ -13,11 +13,7 @@
         ></el-input>
         <div class="input-footer flex-v">
           <div class="flex-1 flex-v">
-            <span class="footer-tip">下载方式：</span>
-            <el-radio-group v-model="downloadRadio">
-              <el-radio label="1" size="small">Ts 片段</el-radio>
-              <el-radio label="2" size="small">Hls 录制</el-radio>
-            </el-radio-group>
+            <span class="footer-tip" v-if="downloadLoading">下载进度：{{ downloadProgress }}%</span>
           </div>
           <el-button
             class="footer-button"
@@ -26,7 +22,7 @@
             circle
             @click="handleStart"
           >
-            <div v-if="downloadLoading" class="footer-block"></div>
+            <el-icon v-if="downloadLoading"><MoreFilled /></el-icon>
             <el-icon v-else><Promotion /></el-icon>
           </el-button>
         </div>
@@ -38,16 +34,14 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { ElNotification, ElMessageBox } from 'element-plus'
-import { Promotion } from '@element-plus/icons-vue'
+import { Promotion, MoreFilled } from '@element-plus/icons-vue'
 import { FFmpeg } from '@ffmpeg/ffmpeg'
 import { fetchFile } from '@ffmpeg/util'
 import Hls from 'hls.js'
-import { parseM3u8ToTsUrls, decryptBlob } from '../utils/decrypt-blob'
 
 const inputContent = ref('')
 const downloadLoading = ref(false)
 const downloadProgress = ref(0)
-const downloadRadio = ref('1')
 const downloadType = ref('video')
 const documentTitle = document.title
 
@@ -84,12 +78,8 @@ const handleStart = async () => {
   }
   downloadProgress.value = 0
   downloadLoading.value = true
-  if (downloadRadio.value === '1') {
-    downloadByTsUrls(m3u8UrlList[0])
-  } else if (downloadRadio.value === '2') {
-    resetData()
-    startDownloadByHls(m3u8UrlList)
-  }
+  resetData()
+  startDownloadByHls(m3u8UrlList)
 }
 
 const resetData = () => {
@@ -100,68 +90,6 @@ const resetData = () => {
   audioRecorder = null
   audioChunks = []
   
-}
-
-const downloadByTsUrls = async (m3u8Url) => {
-  try {
-    // 1. 解析.m3u8文件
-    const { tsList, keyInfo, error } = await parseM3u8ToTsUrls(m3u8Url)
-    if (error) {
-      ElNotification({
-        title: '提示',
-        message: error
-      })
-      downloadLoading.value = false
-      return
-    }
-
-    // 2. 下载所有.ts片段
-    const tsBlobs = []
-    for (const [index, url] of tsList.entries()) {
-      if (!downloadLoading.value) {
-        break
-      }
-      const response = await fetch(url)
-      if (!response.ok) {
-        console.log(`下载片段失败: ${url}`)
-      }
-      let blob = await response.blob()
-      if (keyInfo) {
-        blob = await decryptBlob(blob, keyInfo)
-      }
-      if (blob) tsBlobs.push(blob)
-      downloadProgress.value = (((index + 1) / tsList.length) * 100).toFixed(2)
-      document.title = `${downloadProgress.value}% - ${documentTitle}`
-    }
-
-    const tsBuffers = await Promise.all(tsBlobs.map(blob => blob.arrayBuffer()))
-
-    const ffmpeg = new FFmpeg()
-    ffmpeg.on('log', ({ message }) => console.log(message))
-    await ffmpeg.load()
-    for (let index = 0; index < tsBuffers.length; index++) {
-      const buffer = tsBuffers[index]
-      await ffmpeg.writeFile(`${index}.ts`, new Uint8Array(buffer))
-    }
-    let fileList = ''
-    for (let i = 0; i < tsBuffers.length; i++) {
-      fileList += `file '${i}.ts'\n`
-    }
-    await ffmpeg.writeFile('fileList.txt', new TextEncoder().encode(fileList))
-    await ffmpeg.exec(['-f', 'concat', '-safe', '0', '-i', 'fileList.txt', '-c', 'copy', '-movflags', 'faststart', 'output.mp4'])
-
-    // 获取合并后的视频文件
-    const data = await ffmpeg.readFile('output.mp4')
-    downloadMp4([data.buffer])
-
-    downloadLoading.value = false
-  } catch (error) {
-    ElNotification.error({
-      title: '提示',
-      message: '下载过程中出错'
-    })
-    downloadLoading.value = false
-  }
 }
 
 const startDownloadByHls = async (m3u8UrlList) => {
@@ -560,7 +488,6 @@ const mergeFiles = async () => {
   await ffmpeg.writeFile('input_audio.webm', await fetchFile(audioBlob))
   await ffmpeg.writeFile('input_video.webm', await fetchFile(videoBlob))
 
-  console.log(111111111)
   await ffmpeg.exec(['-i', 'input_audio.webm', '-i', 'input_video.webm', '-c:v', 'copy', '-c:a', 'aac', 'output.mp4'])
 
   const data = await ffmpeg.readFile('output.mp4')

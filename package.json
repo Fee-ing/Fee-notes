@@ -21,6 +21,7 @@
     "hls.js": "^1.5.20",
     "js-file-download": "^0.4.12",
     "jsbarcode": "^3.11.5",
+    "mux.js": "^6.3.0",
     "qrcode": "^1.5.3",
     "vue": "^3.2.13",
     "vue-draggable-next": "^2.2.1",
