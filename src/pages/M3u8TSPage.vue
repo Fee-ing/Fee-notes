@@ -133,12 +133,32 @@ const handleStart = () => {
     return
   }
   if (!downloading.value) {
+    resetData();
     downloading.value = true;
     getMP4();
   } else {
     togglePause();
   }
 }
+
+const resetData = () => {
+  url.value = '';
+  title.value = '';
+  tips.value = 'm3u8 视频在线提取工具';
+  isPause.value = false;
+  isGetMP4.value = false;
+  durationSecond.value = 0;
+  downloading.value = false;
+  beginTime.value = '';
+  errorNum.value = 0;
+  finishNum.value = 0;
+  downloadIndex.value = 0;
+  streamDownloadIndex.value = 0;
+  finishList.value = [];
+  tsUrlList.value = [];
+  mediaFileList.value = [];
+  rangeDownload.isShowRange = false;
+};
 
 // Methods
 const getSource = () => {
