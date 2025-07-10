@@ -83,7 +83,7 @@ const downloader = inject('downloader'); // 从插件注入工具函数
 import { ElNotification } from 'element-plus'
 import { Promotion, MoreFilled, Refresh } from '@element-plus/icons-vue'
 
-const url = ref('https://hls.qzkj.tech/videos4/f71f3348fec660d6e2f1fff14b820ce6/f71f3348fec660d6e2f1fff14b820ce6.m3u8?auth_key=1752108884-686f0f54949de-0-8167e3c47d0a2fc9c6c3181cee730d77&v=3&time=0');
+const url = ref('');
 const tips = ref('m3u8 视频在线提取工具');
 const title = ref('');
 const isPause = ref(false);
