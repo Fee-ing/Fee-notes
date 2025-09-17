@@ -158,6 +158,9 @@ const resetData = () => {
   tsUrlList.value = [];
   mediaFileList.value = [];
   rangeDownload.isShowRange = false;
+  rangeDownload.startSegment = '';
+  rangeDownload.endSegment = '';
+  rangeDownload.targetSegment = 1;
 };
 
 // Methods
